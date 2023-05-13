@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\lib\Kern\src\Kern\Kern.csproj" />
-    <ProjectReference Include="..\..\lib\Kern\src\Kern.AspNetCore\Kern.AspNetCore.csproj" />
+    <ProjectReference Include="..\..\..\lib\Kern\src\Kern\Kern.csproj" />
+    <ProjectReference Include="..\..\..\lib\Kern\src\Kern.AspNetCore\Kern.AspNetCore.csproj" />
   </ItemGroup>
 
 </Project>
