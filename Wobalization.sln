@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{3E0D9843-8677-4FD0-BB65-7DEAE87FB92B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Kern", "Kern", "{332E13C0-8F9C-48B5-B255-B9140F1BB128}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{A6149F61-7E91-4AA8-9781-9D992E11FFE8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kern", "lib\Kern\src\Kern\Kern.csproj", "{0CEF22F6-CBD7-41F2-B46A-0ABF62224E2B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kern.AspNetCore", "lib\Kern\src\Kern.AspNetCore\Kern.AspNetCore.csproj", "{D52224B7-D443-47FD-99DD-4450031F149F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{4BD0B279-B66A-4F6A-8E2E-9E0722EB282E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wobalization.Api", "src\Wobalization.Api\Wobalization.Api.csproj", "{DFA4AB54-EDF4-4507-8021-BF292B96BCAB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0CEF22F6-CBD7-41F2-B46A-0ABF62224E2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CEF22F6-CBD7-41F2-B46A-0ABF62224E2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CEF22F6-CBD7-41F2-B46A-0ABF62224E2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CEF22F6-CBD7-41F2-B46A-0ABF62224E2B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D52224B7-D443-47FD-99DD-4450031F149F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D52224B7-D443-47FD-99DD-4450031F149F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D52224B7-D443-47FD-99DD-4450031F149F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D52224B7-D443-47FD-99DD-4450031F149F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DFA4AB54-EDF4-4507-8021-BF292B96BCAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DFA4AB54-EDF4-4507-8021-BF292B96BCAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DFA4AB54-EDF4-4507-8021-BF292B96BCAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DFA4AB54-EDF4-4507-8021-BF292B96BCAB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{332E13C0-8F9C-48B5-B255-B9140F1BB128} = {3E0D9843-8677-4FD0-BB65-7DEAE87FB92B}
+		{A6149F61-7E91-4AA8-9781-9D992E11FFE8} = {332E13C0-8F9C-48B5-B255-B9140F1BB128}
+		{0CEF22F6-CBD7-41F2-B46A-0ABF62224E2B} = {A6149F61-7E91-4AA8-9781-9D992E11FFE8}
+		{D52224B7-D443-47FD-99DD-4450031F149F} = {A6149F61-7E91-4AA8-9781-9D992E11FFE8}
+		{DFA4AB54-EDF4-4507-8021-BF292B96BCAB} = {4BD0B279-B66A-4F6A-8E2E-9E0722EB282E}
+	EndGlobalSection
+EndGlobal
