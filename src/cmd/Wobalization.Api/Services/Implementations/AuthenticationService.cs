@@ -15,16 +15,16 @@ namespace Wobalization.Api.Services.Implementations;
 public class AuthenticationService : IAuthenticationService
 {
     private readonly DatabaseContext _dbContext;
-    private readonly IdentityService _identityService;
+    private readonly IIdentityService _identityService;
+    private readonly IdGenerator _idGenerator;
     private readonly IValidator<InLoginDto> _loginValidator;
     private readonly IValidator<InUserAddDto> _registerValidator;
-    private readonly IdGenerator _idGenerator;
 
 
     public AuthenticationService(
         DatabaseContext dbContext,
         IValidator<InLoginDto> loginValidator,
-        IdentityService identityService,
+        IIdentityService identityService,
         IValidator<InUserAddDto> registerValidator,
         IdGenerator idGenerator)
     {

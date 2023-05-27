@@ -5,6 +5,10 @@
         "jetbrains.resharper.globaltools": {
             "version": "2023.1.1",
             "commands": ["jb"]
+        },
+        "swashbuckle.aspnetcore.cli": {
+            "version": "6.4.0",
+            "commands": ["swagger"]
         }
     }
 }

@@ -1,0 +1,154 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Wobalization API",
+    "description": "# Introduction\nThe Wobalization API API follows the general patterns of REST.\nYou can use the resources of a Wobalization API by making HTTPS requests to URLs that represent those resources. You can find description of all the endpoints here.\n\n# Getting Started\nTo test and explore Wobalization API API you can use Postman.\nPostman is a powerful HTTP client for testing RESTful APIs by displaying requests and responses in manageable formats.\n\nThese are steps you need to take to start testing Wobalization API API via Postman:\n- Download and install Postman. You can get it here: [https://www.getpostman.com](https://www.getpostman.com)\n- Get [Wobalization API API Postman Collection](/swagger/v1/swagger.json) and import it into Postman.\n- Define variables used in postman collection. \n    For example, in Wobalization API production environment for Wobalization API API v1.0 you should define baseUrl variable.\n    It is useful to configure variables in postman environments so you will not have to redefine the values for each request manually.\n    [Learn more about Postman environments](https://learning.postman.com/docs/sending-requests/managing-environments/).\n- Configure the Postman Authorization header. Each request to Wobalization API API should contain a token in request header.\n    You can read more about ways to get the token in the Authorization section of the documentation.\n- Once you complete these steps you are ready to make calls to Wobalization API API via Postman.\n\n# Authorization\nAn application credential is any piece of information that identifies, authenticates, or authorizes an application in some way.\n\nWobalization API API provide one authorization method:\n- Bearer token\n\n## Bearer token\nBearer tokens are a simple way to make calls to the API.\nYou can get your bearer token by hitting login endpoint.\nFor every call to the API you must include your access token in the Authorization header:\n\n```\n    Authorization: Bearer eyJhbGciOiJIUzI1NiI...\n```\n",
+    "version": "v1"
+  },
+  "paths": {
+    "/authentication/status": {
+      "get": {
+        "tags": [
+          "Authentication"
+        ],
+        "operationId": "Get app initialized status",
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/authentication/sign-in": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "operationId": "Sign in",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InLoginDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OutTokenDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/authentication/sign-up": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "operationId": "Sign up",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InUserAddDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OutTokenDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/authentication/sign-out": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "operationId": "Sign out",
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "InLoginDto": {
+        "required": [
+          "password",
+          "username"
+        ],
+        "type": "object",
+        "properties": {
+          "username": {
+            "maxLength": 50,
+            "minLength": 1,
+            "type": "string"
+          },
+          "password": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "InUserAddDto": {
+        "required": [
+          "fullName",
+          "password",
+          "username"
+        ],
+        "type": "object",
+        "properties": {
+          "fullName": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "username": {
+            "maxLength": 50,
+            "minLength": 1,
+            "type": "string"
+          },
+          "password": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OutTokenDto": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}
