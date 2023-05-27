@@ -4,7 +4,7 @@ namespace Wobalization.Api.Models;
 
 public class IdentityModel
 {
-    public long Id { get; set; }
+    public long? Id { get; set; }
 
     public List<Claim> ToClaims()
     {

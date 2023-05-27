@@ -96,9 +96,17 @@ public class IdentityService : IIdentityService
     /// Sign out current user
     /// </summary>
     /// <returns>Generated JWT.</returns>
-    public async Task SignOutAsync()
+    public async Task<ErrorBase?> SignOutAsync()
     {
+        var (identity, identityError) = Get();
+        if (identityError != null)
+        {
+            return identityError;
+        }
+
         var httpContext = _httpContextAccessor.HttpContext!;
         await httpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+        return null;
     }
 }
