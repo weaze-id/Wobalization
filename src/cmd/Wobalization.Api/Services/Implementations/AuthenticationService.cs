@@ -55,7 +55,7 @@ public class AuthenticationService : IAuthenticationService
         }
 
         var user = await _dbContext.User!
-            .Where(e => e.Username!.ToLowerInvariant() == dto.Username!.ToLowerInvariant())
+            .Where(e => e.Username!.ToLower() == dto.Username!.ToLower())
             .Select(e => new User
             {
                 Id = e.Id,
