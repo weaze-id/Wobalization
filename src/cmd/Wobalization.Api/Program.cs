@@ -36,6 +36,12 @@ builder.Services.AddSingleton(services =>
     return rsa;
 });
 
+builder.Services.AddSingleton<SecurityKey>(services =>
+{
+    var rsa = services.GetRequiredService<RSACryptoServiceProvider>();
+    return new RsaSecurityKey(rsa);
+});
+
 KernAuthorization.AddAuthorization(
     builder.Services,
     jwtOptions: (options, securityKey) =>
