@@ -4,7 +4,9 @@ using FluentValidation;
 using Kern.AspNetCore.Endpoints.Extensions;
 using Kern.AspNetCore.Extensions;
 using Kern.AspNetCore.Response;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Shared.Entities.DatabaseContexts;
 using Wobalization.Api.Endpoints;
 using Wobalization.Api.Extensions;
 using Wobalization.Api.Services.Implementations;
@@ -72,6 +74,13 @@ KernAuthorization.AddAuthorization(
 );
 
 var app = builder.Build();
+
+// Run database migration when app started
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+    await dbContext.Database.MigrateAsync();
+}
 
 // Redirect HTTP to HTTPS in production environment
 if (app.Environment.IsProduction())
