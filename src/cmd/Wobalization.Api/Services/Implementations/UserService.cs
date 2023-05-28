@@ -23,7 +23,7 @@ public class UserService : IUserService
     private readonly IValidator<InUserDto> _validator;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="UserService"/> class.
+    /// Initializes a new instance of the <see cref="UserService" /> class.
     /// </summary>
     /// <param name="dbContext">The database context.</param>
     /// <param name="idGenerator">The ID generator.</param>
@@ -63,7 +63,7 @@ public class UserService : IUserService
 
         if (isUsernameUsed)
         {
-            return (null, null, new ConflictError("Username already exists"));
+            return (null, null, new ConflictError("Username already used"));
         }
 
         // Create a new user with the provided information
@@ -194,13 +194,13 @@ public class UserService : IUserService
         // Check if the username is already used
         var isUsernameUsed = await _dbContext.User!
             .HasUsername(dto.Username!)
-            .ExceptId(identity!.Id.GetValueOrDefault())
+            .ExceptId(id)
             .NotDeleted()
             .AnyAsync();
 
         if (isUsernameUsed)
         {
-            return (null, null, new ConflictError("Username already exists"));
+            return (null, null, new ConflictError("Username already used"));
         }
 
         // Save changes

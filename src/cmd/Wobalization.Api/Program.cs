@@ -37,11 +37,13 @@ builder.Services.Configure<RouteHandlerOptions>(o => o.ThrowOnBadRequest = true)
 builder.Services.AddValidatorsFromAssembly(Assembly.Load("Shared"));
 
 // Register services
+builder.Services.AddScoped<IAppService, AppService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IIdentityService, IdentityService>();
 builder.Services.AddScoped<IUserService, UserService>();
 
 // Add endpoints for the Authentication API
+builder.Services.AddEndpoints<AppEndpoint>();
 builder.Services.AddEndpoints<AuthenticationEndpoint>();
 builder.Services.AddEndpoints<UserEndpoint>();
 
