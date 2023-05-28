@@ -12,6 +12,9 @@ using Wobalization.Api.Services.Interfaces;
 
 namespace Wobalization.Api.Services.Implementations;
 
+/// <summary>
+/// Service implementation for managing users.
+/// </summary>
 public class UserService : IUserService
 {
     private readonly DatabaseContext _dbContext;
@@ -19,6 +22,13 @@ public class UserService : IUserService
     private readonly IdGenerator _idGenerator;
     private readonly IValidator<InUserDto> _validator;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="UserService"/> class.
+    /// </summary>
+    /// <param name="dbContext">The database context.</param>
+    /// <param name="idGenerator">The ID generator.</param>
+    /// <param name="identityService">The identity service.</param>
+    /// <param name="validator">The validator for user DTO.</param>
     public UserService(
         DatabaseContext dbContext,
         IdGenerator idGenerator,
@@ -31,6 +41,11 @@ public class UserService : IUserService
         _validator = validator;
     }
 
+    /// <summary>
+    /// Add a new user.
+    /// </summary>
+    /// <param name="dto">The user data to add.</param>
+    /// <returns>A tuple containing the added user DTO, validation results, and an error if any.</returns>
     public async Task<(OutUserDto?, ValidationResult?, ErrorBase?)> AddAsync(InUserDto dto)
     {
         // Validate the DTO
@@ -48,7 +63,7 @@ public class UserService : IUserService
 
         if (isUsernameUsed)
         {
-            return (null, null, new ConflictError("Username already exist"));
+            return (null, null, new ConflictError("Username already exists"));
         }
 
         // Create a new user with the provided information
@@ -69,6 +84,11 @@ public class UserService : IUserService
         return (outDto, null, outDtoError);
     }
 
+    /// <summary>
+    /// Delete a user with the specified ID.
+    /// </summary>
+    /// <param name="id">The ID of the user to delete.</param>
+    /// <returns>An error if any.</returns>
     public async Task<ErrorBase?> DeleteAsync(long id)
     {
         // Get user identity
@@ -98,6 +118,11 @@ public class UserService : IUserService
         return null;
     }
 
+    /// <summary>
+    /// Get a user with the specified ID.
+    /// </summary>
+    /// <param name="id">The ID of the user to retrieve.</param>
+    /// <returns>A tuple containing the user DTO and an error if any.</returns>
     public async Task<(OutUserDto?, ErrorBase?)> GetAsync(long id)
     {
         var dto = await _dbContext.User!
@@ -114,6 +139,10 @@ public class UserService : IUserService
         return (dto, null);
     }
 
+    /// <summary>
+    /// Get a list of all users.
+    /// </summary>
+    /// <returns>A tuple containing the list of user DTOs and an error if any.</returns>
     public async Task<(List<OutUserDto>?, ErrorBase?)> GetListAsync()
     {
         var dtos = await _dbContext.User!
@@ -124,6 +153,12 @@ public class UserService : IUserService
         return (dtos, null);
     }
 
+    /// <summary>
+    /// Update a user with the specified ID.
+    /// </summary>
+    /// <param name="id">The ID of the user to update.</param>
+    /// <param name="dto">The updated user data.</param>
+    /// <returns>A tuple containing the updated user DTO, validation results, and an error if any.</returns>
     public async Task<(OutUserDto?, ValidationResult?, ErrorBase?)> UpdateAsync(long id, InUserDto dto)
     {
         // Get user identity
@@ -165,7 +200,7 @@ public class UserService : IUserService
 
         if (isUsernameUsed)
         {
-            return (null, null, new ConflictError("Username already exist"));
+            return (null, null, new ConflictError("Username already exists"));
         }
 
         // Save changes
