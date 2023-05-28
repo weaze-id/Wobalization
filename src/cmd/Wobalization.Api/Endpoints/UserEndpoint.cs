@@ -11,7 +11,8 @@ public class UserEndpoint : IEndpoints
     {
         var group = endpoints
             .MapGroup("/user")
-            .WithTags("User");
+            .WithTags("User")
+            .RequireAuthorization();
 
         group
             .MapGet("/", GetListAsync)

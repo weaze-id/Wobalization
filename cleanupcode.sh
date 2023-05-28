@@ -2,4 +2,4 @@
 
 dotnet clean
 dotnet restore
-dotnet jb cleanupcode Wobalization.sln --verbosity=INFO --exclude=lib/**/*
+dotnet jb cleanupcode Wobalization.sln --verbosity=OFF --exclude=lib/**/*

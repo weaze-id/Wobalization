@@ -11,7 +11,8 @@ public class AppEndpoint : IEndpoints
     {
         var group = endpoints
             .MapGroup("/app")
-            .WithTags("App");
+            .WithTags("App")
+            .RequireAuthorization();
 
         group
             .MapGet("/", GetListAsync)
