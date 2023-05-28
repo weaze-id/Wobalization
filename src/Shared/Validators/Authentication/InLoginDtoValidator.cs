@@ -14,6 +14,7 @@ public class InLoginDtoValidator : AbstractValidator<InLoginDto>
 
         RuleFor(e => e.Password)
             .Cascade(CascadeMode.Stop)
-            .NotEmpty();
+            .NotEmpty()
+            .MinimumLength(8);
     }
 }

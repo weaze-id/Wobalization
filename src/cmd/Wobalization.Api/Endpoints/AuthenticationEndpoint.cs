@@ -1,7 +1,6 @@
 using Kern.AspNetCore.Endpoints;
 using Kern.AspNetCore.Response.Extensions;
 using Shared.Dtos.Authentication;
-using Shared.Dtos.User;
 using Wobalization.Api.Services.Interfaces;
 
 namespace Wobalization.Api.Endpoints;
@@ -41,13 +40,13 @@ public class AuthenticationEndpoint : IEndpoints
         return result.Response();
     }
 
-    private static async Task<IResult> SignInAsync(IAuthenticationService service, InLoginDto dto)
+    private static async Task<IResult> SignInAsync(InLoginDto dto, IAuthenticationService service)
     {
         var result = await service.SignInAsync(dto);
         return result.Response();
     }
 
-    private static async Task<IResult> SignUpAsync(IAuthenticationService service, InUserAddDto dto)
+    private static async Task<IResult> SignUpAsync(InRegisterDto dto, IAuthenticationService service)
     {
         var result = await service.SignUpAsync(dto);
         return result.Response();

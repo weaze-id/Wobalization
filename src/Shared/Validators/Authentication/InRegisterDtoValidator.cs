@@ -1,11 +1,11 @@
 using FluentValidation;
-using Shared.Dtos.User;
+using Shared.Dtos.Authentication;
 
-namespace Shared.Validators.User;
+namespace Shared.Validators.Authentication;
 
-public class InUserAddDtoValidator : AbstractValidator<InUserAddDto>
+public class InRegisterDtoValidtor : AbstractValidator<InRegisterDto>
 {
-    public InUserAddDtoValidator()
+    public InRegisterDtoValidtor()
     {
         RuleFor(e => e.FullName)
             .Cascade(CascadeMode.Stop)
@@ -19,6 +19,7 @@ public class InUserAddDtoValidator : AbstractValidator<InUserAddDto>
 
         RuleFor(e => e.Password)
             .Cascade(CascadeMode.Stop)
-            .NotEmpty();
+            .NotEmpty()
+            .MinimumLength(8);
     }
 }
