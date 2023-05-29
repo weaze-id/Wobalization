@@ -16,11 +16,6 @@ public class LanguageConfiguration : IEntityTypeConfiguration<Language>
             .IsRequired();
 
         builder
-            .Property(e => e.Name)
-            .IsRequired()
-            .HasMaxLength(50);
-
-        builder
             .Property(e => e.Culture)
             .IsRequired()
             .HasMaxLength(10);

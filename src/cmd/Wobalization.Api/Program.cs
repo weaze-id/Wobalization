@@ -40,11 +40,13 @@ builder.Services.AddValidatorsFromAssembly(Assembly.Load("Shared"));
 builder.Services.AddScoped<IAppService, AppService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IIdentityService, IdentityService>();
+builder.Services.AddScoped<ILanguageService, LanguageService>();
 builder.Services.AddScoped<IUserService, UserService>();
 
 // Add endpoints for the Authentication API
 builder.Services.AddEndpoints<AppEndpoint>();
 builder.Services.AddEndpoints<AuthenticationEndpoint>();
+builder.Services.AddEndpoints<LanguageEndpoint>();
 builder.Services.AddEndpoints<UserEndpoint>();
 
 // Configure RSA private key for JWT token generation and signing

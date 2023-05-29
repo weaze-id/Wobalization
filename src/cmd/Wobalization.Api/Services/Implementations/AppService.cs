@@ -59,14 +59,14 @@ public class AppService : IAppService
 
         if (isAppNameUsed)
         {
-            return (null, null, new ConflictError("App Name already used"));
+            return (null, null, new ConflictError("App name already used"));
         }
 
         // Create a new app with the provided information
         var app = new App
         {
             Id = _idGenerator.CreateId(),
-            Name = dto.Name,
+            Name = dto.Name.EmptyToNull(),
             Key = Guid.NewGuid(),
             CreatedAt = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()
         };

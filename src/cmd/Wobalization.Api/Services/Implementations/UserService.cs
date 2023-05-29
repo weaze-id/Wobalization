@@ -70,8 +70,8 @@ public class UserService : IUserService
         var user = new User
         {
             Id = _idGenerator.CreateId(),
-            FullName = dto.FullName,
-            Username = dto.Username,
+            FullName = dto.FullName.EmptyToNull(),
+            Username = dto.Username.EmptyToNull(),
             Password = BC.HashPassword("secret123"),
             CreatedAt = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()
         };
