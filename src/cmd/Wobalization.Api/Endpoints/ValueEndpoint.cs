@@ -41,7 +41,12 @@ public class ValueEndpoint : IEndpoints
         return group;
     }
 
-    private static async Task<IResult> GetListAsync(long appId, long languageId, string? search, long? lastId, IValueService service)
+    private static async Task<IResult> GetListAsync(
+        long appId,
+        long languageId,
+        string? search,
+        long? lastId,
+        IValueService service)
     {
         var result = await service.GetListAsync(appId, languageId, search, lastId);
         return result.Response();
@@ -59,7 +64,12 @@ public class ValueEndpoint : IEndpoints
         return result.Response();
     }
 
-    private static async Task<IResult> UpdateAsync(long appId, long languageId, long id, InValueDto dto, IValueService service)
+    private static async Task<IResult> UpdateAsync(
+        long appId,
+        long languageId,
+        long id,
+        InValueDto dto,
+        IValueService service)
     {
         var result = await service.UpdateAsync(appId, languageId, id, dto);
         return result.Response();

@@ -19,7 +19,9 @@ public static class TranslationValueExtensions
         return queryable.Where(e => e.TranslationKey!.AppId == appId);
     }
 
-    public static IQueryable<TranslationValue> HasLanguageId(this IQueryable<TranslationValue> queryable, long languageId)
+    public static IQueryable<TranslationValue> HasLanguageId(
+        this IQueryable<TranslationValue> queryable,
+        long languageId)
     {
         return queryable.Where(e => e.LanguageId == languageId);
     }

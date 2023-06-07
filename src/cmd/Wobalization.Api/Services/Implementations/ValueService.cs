@@ -42,7 +42,11 @@ public class ValueService : IValueService
     /// <returns>
     /// A tuple containing a list of value DTOs if successful; otherwise, an error base object.
     /// </returns>
-    public async Task<(List<OutValueDto>?, ErrorBase?)> GetListAsync(long appId, long languageId, string? search, long? lastId)
+    public async Task<(List<OutValueDto>?, ErrorBase?)> GetListAsync(
+        long appId,
+        long languageId,
+        string? search,
+        long? lastId)
     {
         // Check if the app exists
         var isAppExist = await _dbContext.App!
@@ -135,7 +139,10 @@ public class ValueService : IValueService
     /// <returns>
     /// A tuple containing the output value DTO, the validation result, and the error base.
     /// </returns>
-    public async Task<(OutValueDto?, ValidationResult?, ErrorBase?)> AddAsync(long appId, long languageId, InValueDto dto)
+    public async Task<(OutValueDto?, ValidationResult?, ErrorBase?)> AddAsync(
+        long appId,
+        long languageId,
+        InValueDto dto)
     {
         // Check if the app exists
         var isAppExist = await _dbContext.App!
@@ -201,7 +208,11 @@ public class ValueService : IValueService
     /// <returns>
     /// A tuple containing the updated value DTO if successful; otherwise, an error base object.
     /// </returns>
-    public async Task<(OutValueDto?, ValidationResult?, ErrorBase?)> UpdateAsync(long appId, long languageId, long id, InValueDto dto)
+    public async Task<(OutValueDto?, ValidationResult?, ErrorBase?)> UpdateAsync(
+        long appId,
+        long languageId,
+        long id,
+        InValueDto dto)
     {
         // Check if the app exists
         var isAppExist = await _dbContext.App!
