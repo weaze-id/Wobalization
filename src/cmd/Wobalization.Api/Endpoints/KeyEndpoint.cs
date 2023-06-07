@@ -1,0 +1,73 @@
+using Kern.AspNetCore.Endpoints;
+using Kern.AspNetCore.Response.Extensions;
+using Shared.Dtos.Key;
+using Wobalization.Api.Services.Interfaces;
+
+namespace Wobalization.Api.Endpoints;
+
+public class KeyEndpoint : IEndpoints
+{
+    public IEndpointRouteBuilder MapEndpoints(IEndpointRouteBuilder endpoints)
+    {
+        var group = endpoints
+            .MapGroup("/app/{appId}/key")
+            .WithTags("Key")
+            .RequireAuthorization();
+
+        group
+            .MapGet("/", GetListAsync)
+            .WithName("Get a list of key")
+            .Produces<OutKeyDto>();
+
+        group
+            .MapGet("/{id}", GetAsync)
+            .WithName("Get a key by id")
+            .Produces<OutKeyDto>();
+
+        group
+            .MapPost("/", AddAsync)
+            .WithName("Add new key")
+            .Produces<OutKeyDto>();
+
+        group
+            .MapPut("/", UpdateAsync)
+            .WithName("Update existing key")
+            .Produces<OutKeyDto>();
+
+        group
+            .MapDelete("/{id}", DeleteAsync)
+            .WithName("Delete existing key");
+
+        return group;
+    }
+
+    private static async Task<IResult> GetListAsync(long appId, string? search, long? lastId, IKeyService service)
+    {
+        var result = await service.GetListAsync(appId, search, lastId);
+        return result.Response();
+    }
+
+    private static async Task<IResult> GetAsync(long appId, long id, IKeyService service)
+    {
+        var result = await service.GetAsync(appId, id);
+        return result.Response();
+    }
+
+    private static async Task<IResult> AddAsync(long appId, InKeyDto dto, IKeyService service)
+    {
+        var result = await service.AddAsync(appId, dto);
+        return result.Response();
+    }
+
+    private static async Task<IResult> UpdateAsync(long appId, long id, InKeyDto dto, IKeyService service)
+    {
+        var result = await service.UpdateAsync(appId, id, dto);
+        return result.Response();
+    }
+
+    private static async Task<IResult> DeleteAsync(long appId, long id, IKeyService service)
+    {
+        var result = await service.DeleteAsync(appId, id);
+        return result.Response();
+    }
+}

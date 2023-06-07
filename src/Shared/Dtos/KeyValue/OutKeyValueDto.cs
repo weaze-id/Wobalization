@@ -1,3 +1,6 @@
+using Shared.Dtos.Key;
+using Shared.Dtos.Value;
+
 namespace Shared.Dtos.KeyValue;
 
 public class OutKeyValueDto

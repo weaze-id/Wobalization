@@ -1,4 +1,4 @@
-namespace Shared.Dtos.KeyValue;
+namespace Shared.Dtos.Key;
 
 public class InKeyDto
 {
