@@ -51,6 +51,17 @@ public class LanguageService : ILanguageService
             return (null, validationResult, null);
         }
 
+        // Check if the app exist
+        var isAppExist = await _dbContext.App!
+            .HasId(appId)
+            .NotDeleted()
+            .AnyAsync();
+
+        if (isAppExist)
+        {
+            return (null, null, new NotFoundError("App not found"));
+        }
+
         // Check if the culture is already exist
         var isCultureExist = await _dbContext.Language!
             .HasAppId(appId)
@@ -87,6 +98,17 @@ public class LanguageService : ILanguageService
     /// <returns>An error if any.</returns>
     public async Task<ErrorBase?> DeleteAsync(long appId, long id)
     {
+        // Check if the app exist
+        var isAppExist = await _dbContext.App!
+            .HasId(appId)
+            .NotDeleted()
+            .AnyAsync();
+
+        if (isAppExist)
+        {
+            return new NotFoundError("App not found");
+        }
+
         // Delete the language
         var language = await _dbContext.Language!
             .AsTracking()
@@ -114,6 +136,17 @@ public class LanguageService : ILanguageService
     /// <returns>A tuple containing the language DTO and an error if any.</returns>
     public async Task<(OutLanguageDto?, ErrorBase?)> GetAsync(long appId, long id)
     {
+        // Check if the app exist
+        var isAppExist = await _dbContext.App!
+            .HasId(appId)
+            .NotDeleted()
+            .AnyAsync();
+
+        if (isAppExist)
+        {
+            return (null, new NotFoundError("App not found"));
+        }
+
         var dto = await _dbContext.Language!
             .HasId(id)
             .HasAppId(appId)
@@ -135,6 +168,17 @@ public class LanguageService : ILanguageService
     /// <returns>A tuple containing the list of language DTOs and an error if any.</returns>
     public async Task<(List<OutLanguageDto>?, ErrorBase?)> GetListAsync(long appId)
     {
+        // Check if the app exist
+        var isAppExist = await _dbContext.App!
+            .HasId(appId)
+            .NotDeleted()
+            .AnyAsync();
+
+        if (isAppExist)
+        {
+            return (null, new NotFoundError("App not found"));
+        }
+
         var dtos = await _dbContext.Language!
             .HasAppId(appId)
             .NotDeleted()
@@ -160,6 +204,17 @@ public class LanguageService : ILanguageService
         if (!validationResult.IsValid)
         {
             return (null, validationResult, null);
+        }
+
+        // Check if the app exist
+        var isAppExist = await _dbContext.App!
+            .HasId(appId)
+            .NotDeleted()
+            .AnyAsync();
+
+        if (isAppExist)
+        {
+            return (null, null, new NotFoundError("App not found"));
         }
 
         // Update the language with the provided information
