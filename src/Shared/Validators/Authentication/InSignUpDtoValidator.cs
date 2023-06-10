@@ -3,9 +3,9 @@ using Shared.Dtos.Authentication;
 
 namespace Shared.Validators.Authentication;
 
-public class InRegisterDtoValidtor : AbstractValidator<InRegisterDto>
+public class InSignUpDtoValidator : AbstractValidator<InSignUpDto>
 {
-    public InRegisterDtoValidtor()
+    public InSignUpDtoValidator()
     {
         RuleFor(e => e.FullName)
             .Cascade(CascadeMode.Stop)

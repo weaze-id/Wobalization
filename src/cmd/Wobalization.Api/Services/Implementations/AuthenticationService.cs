@@ -19,8 +19,8 @@ public class AuthenticationService : IAuthenticationService
     private readonly DatabaseContext _dbContext;
     private readonly IIdentityService _identityService;
     private readonly IdGenerator _idGenerator;
-    private readonly IValidator<InLoginDto> _loginValidator;
-    private readonly IValidator<InRegisterDto> _registerValidator;
+    private readonly IValidator<InSignInDto> _loginValidator;
+    private readonly IValidator<InSignUpDto> _registerValidator;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AuthenticationService" /> class.
@@ -32,9 +32,9 @@ public class AuthenticationService : IAuthenticationService
     /// <param name="idGenerator">The ID generator.</param>
     public AuthenticationService(
         DatabaseContext dbContext,
-        IValidator<InLoginDto> loginValidator,
+        IValidator<InSignInDto> loginValidator,
         IIdentityService identityService,
-        IValidator<InRegisterDto> registerValidator,
+        IValidator<InSignUpDto> registerValidator,
         IdGenerator idGenerator)
     {
         _dbContext = dbContext;
@@ -66,7 +66,7 @@ public class AuthenticationService : IAuthenticationService
     /// <returns>
     /// A tuple containing the generated token, validation result, and error (if any).
     /// </returns>
-    public async Task<(OutTokenDto?, ValidationResult?, ErrorBase?)> SignInAsync(InLoginDto dto)
+    public async Task<(OutTokenDto?, ValidationResult?, ErrorBase?)> SignInAsync(InSignInDto dto)
     {
         // Validate the login DTO
         var validationResult = _loginValidator.Validate(dto);
@@ -107,7 +107,7 @@ public class AuthenticationService : IAuthenticationService
     /// <returns>
     /// A tuple containing the generated token, validation result, and error (if any).
     /// </returns>
-    public async Task<(OutTokenDto?, ValidationResult?, ErrorBase?)> SignUpAsync(InRegisterDto dto)
+    public async Task<(OutTokenDto?, ValidationResult?, ErrorBase?)> SignUpAsync(InSignUpDto dto)
     {
         // Validate the register DTO
         var validationResult = _registerValidator.Validate(dto);

@@ -1,4 +1,5 @@
 using Kern.AspNetCore.Endpoints;
+using Kern.AspNetCore.Response;
 using Kern.AspNetCore.Response.Extensions;
 using Shared.Dtos.Authentication;
 using Wobalization.Api.Services.Interfaces;
@@ -31,6 +32,11 @@ public class AuthenticationEndpoint : IEndpoints
             .MapPost("/sign-out", SignOutAsync)
             .WithName("Sign out");
 
+        group
+            .MapGet("/check", () => JsonResponse.Success())
+            .WithName("Check authentication")
+            .RequireAuthorization();
+
         return group;
     }
 
@@ -40,13 +46,13 @@ public class AuthenticationEndpoint : IEndpoints
         return result.Response();
     }
 
-    private static async Task<IResult> SignInAsync(InLoginDto dto, IAuthenticationService service)
+    private static async Task<IResult> SignInAsync(InSignInDto dto, IAuthenticationService service)
     {
         var result = await service.SignInAsync(dto);
         return result.Response();
     }
 
-    private static async Task<IResult> SignUpAsync(InRegisterDto dto, IAuthenticationService service)
+    private static async Task<IResult> SignUpAsync(InSignUpDto dto, IAuthenticationService service)
     {
         var result = await service.SignUpAsync(dto);
         return result.Response();

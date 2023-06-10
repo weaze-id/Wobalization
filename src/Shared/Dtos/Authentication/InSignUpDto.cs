@@ -1,6 +1,6 @@
 namespace Shared.Dtos.Authentication;
 
-public class InRegisterDto
+public class InSignUpDto
 {
     public string? FullName { get; set; }
     public string? Username { get; set; }

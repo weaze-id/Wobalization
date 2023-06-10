@@ -1,3 +1,20 @@
 ﻿@page "/"
+@using Wobalization.Wasm.Providers
+@using Wobalization.Wasm.Components
 
-<h1>Hello, world!</h1>
+<GuardView>
+    <AuthorizeView>
+        <h1>Hello, world!</h1>
+
+        <div>App: @AppP?.Apps?.Count()</div>
+        <div>Language: @AppP?.Languages?.Count()</div>
+        <div>Key: @AppP?.Keys?.Count()</div>
+    </AuthorizeView>
+</GuardView>
+
+@code {
+
+    [CascadingParameter]
+    public AppProvider? AppP { get; set; }
+
+}

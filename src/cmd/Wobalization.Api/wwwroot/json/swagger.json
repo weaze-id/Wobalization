@@ -169,7 +169,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/InLoginDto"
+                "$ref": "#/components/schemas/InSignInDto"
               }
             }
           },
@@ -199,7 +199,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/InRegisterDto"
+                "$ref": "#/components/schemas/InSignUpDto"
               }
             }
           },
@@ -225,6 +225,19 @@
           "Authentication"
         ],
         "operationId": "Sign out",
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/authentication/check": {
+      "get": {
+        "tags": [
+          "Authentication"
+        ],
+        "operationId": "Check authentication",
         "responses": {
           "200": {
             "description": "Success"
@@ -1058,7 +1071,7 @@
         },
         "additionalProperties": false
       },
-      "InLoginDto": {
+      "InSignInDto": {
         "required": [
           "password",
           "username"
@@ -1077,7 +1090,7 @@
         },
         "additionalProperties": false
       },
-      "InRegisterDto": {
+      "InSignUpDto": {
         "required": [
           "fullName",
           "password",

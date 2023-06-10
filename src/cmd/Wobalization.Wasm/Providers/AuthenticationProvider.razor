@@ -1,0 +1,16 @@
+<MudThemeProvider/>
+<MudDialogProvider/>
+<MudSnackbarProvider/>
+
+<CascadingValue Value="@(this)">
+    @if (_loaderState == LoaderState.None)
+    {
+        @ChildContent
+    }
+    else if (_loaderState == LoaderState.Loading)
+    {
+        <MudStack Justify="@Justify.Center" AlignItems="@AlignItems.Center" Style="height: 100vh">
+            <MudProgressCircular Color="Color.Primary" Size="Size.Large" Indeterminate="true"/>
+        </MudStack>
+    }
+</CascadingValue>

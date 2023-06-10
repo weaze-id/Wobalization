@@ -1,0 +1,10 @@
+@if (_isAuthorized)
+{
+    @AuthorizeView
+    ;
+}
+else if (UnauthorizedView != null)
+{
+    @UnauthorizedView
+    ;
+}

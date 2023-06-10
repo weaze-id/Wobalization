@@ -83,6 +83,18 @@ KernAuthorization.AddAuthorization(
         }
 );
 
+// Setup cors policy
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(builder =>
+    {
+        builder.WithOrigins("http://localhost:5077")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
+
 var app = builder.Build();
 
 // Run database migration when app started
@@ -107,6 +119,9 @@ app.UseExceptionHandler();
 
 // Configure handling of status code pages
 app.UseStatusCodePages();
+
+// Enable cors middleware
+app.UseCors();
 
 // Enable authentication and authorization middleware
 app.UseAuthentication();
