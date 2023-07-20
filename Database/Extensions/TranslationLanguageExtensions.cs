@@ -10,7 +10,7 @@ public static class TranslationLanguageExtensions
     {
         if (search != null)
         {
-            queryable = queryable.Where(e => e.Culture!.ToLower().Contains(search.ToLower()));
+            queryable = queryable.Where(e => e.Locale!.ToLower().Contains(search.ToLower()));
         }
 
         if (page != null)
@@ -20,7 +20,7 @@ public static class TranslationLanguageExtensions
         }
 
         return queryable
-            .OrderBy(e => e.Culture)
+            .OrderBy(e => e.Locale)
             .Take(DatabaseContext.PaginationSize);
     }
 
@@ -29,7 +29,7 @@ public static class TranslationLanguageExtensions
         return queryable.Select(e => new OutLanguageDto
         {
             Id = e.Id,
-            Culture = e.Culture,
+            Locale = e.Locale,
             CreatedAt = e.CreatedAt,
             UpdatedAt = e.UpdatedAt
         });

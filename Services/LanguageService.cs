@@ -121,16 +121,16 @@ public class LanguageService
             return (null, null, new NotFoundError("App not found"));
         }
 
-        // Check if the culture is already exist
-        var isCultureExist = await _dbContext.TranslationLanguage!
+        // Check if the locale is already exist
+        var isLocaleExist = await _dbContext.TranslationLanguage!
             .Where(e => e.AppId == appId &&
-                        e.Culture!.ToLower() == dto.Culture!.ToLower() &&
+                        e.Locale!.ToLower() == dto.Locale!.ToLower() &&
                         e.DeletedAt == null)
             .AnyAsync();
 
-        if (isCultureExist)
+        if (isLocaleExist)
         {
-            return (null, null, new NotFoundError("Language culture already exist"));
+            return (null, null, new NotFoundError("Language locale already exist"));
         }
 
         // Create a new language with the provided information
@@ -138,7 +138,7 @@ public class LanguageService
         {
             Id = _idGenerator.CreateId(),
             AppId = appId,
-            Culture = dto.Culture.EmptyToNull(),
+            Locale = dto.Locale.EmptyToNull(),
             CreatedAt = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()
         };
 
@@ -192,20 +192,20 @@ public class LanguageService
             return (null, null, new NotFoundError("Language not found"));
         }
 
-        language.Culture = dto.Culture.EmptyToNull();
+        language.Locale = dto.Locale.EmptyToNull();
         language.UpdatedAt = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
-        // Check if the culture is already exist
-        var isCultureExist = await _dbContext.TranslationLanguage!
+        // Check if the locale is already exist
+        var isLocaleExist = await _dbContext.TranslationLanguage!
             .Where(e => e.Id != id &&
                         e.AppId == appId &&
-                        e.Culture!.ToLower() == dto.Culture!.ToLower() &&
+                        e.Locale!.ToLower() == dto.Locale!.ToLower() &&
                         e.DeletedAt == null)
             .AnyAsync();
 
-        if (isCultureExist)
+        if (isLocaleExist)
         {
-            return (null, null, new ConflictError("Language culture already exist"));
+            return (null, null, new ConflictError("Language locale already exist"));
         }
 
         // Save changes

@@ -17,7 +17,7 @@ public class TranslationLanguageConfiguration : IEntityTypeConfiguration<Transla
             .IsRequired();
 
         builder
-            .Property(e => e.Culture)
+            .Property(e => e.Locale)
             .IsRequired()
             .HasMaxLength(10);
 

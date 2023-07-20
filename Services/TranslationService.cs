@@ -7,7 +7,7 @@ using Wobalization.Dtos.Translation;
 namespace Wobalization.Services;
 
 /// <summary>
-/// Represents a TranslationService to get translation by culture.
+/// Represents a TranslationService to get translation by locale.
 /// </summary>
 public class TranslationService
 {
@@ -26,11 +26,11 @@ public class TranslationService
     /// Retrieves a list of translations for a given app from the database.
     /// </summary>
     /// <param name="appKey">The key of the app.</param>
-    /// <param name="culture">The translation culture.</param>
+    /// <param name="locale">The translation locale.</param>
     /// <returns>
     /// A tuple containing a list of translation DTOs if successful; otherwise, an error base object.
     /// </returns>
-    public async Task<(List<OutTranslationDto>?, ErrorBase?)> GetListAsync(Guid appKey, string culture)
+    public async Task<(List<OutTranslationDto>?, ErrorBase?)> GetListAsync(Guid appKey, string locale)
     {
         var dtos = await _dbContext.TranslationKey!
             .Where(e => e.App!.Key == appKey &&
@@ -39,13 +39,18 @@ public class TranslationService
             {
                 Key = e.Key,
                 Value = e.TranslationValues!
-                    .Where(el => el.TranslationLanguage!.Culture == culture &&
+                    .Where(el => el.TranslationLanguage!.Locale == locale &&
                                  el.DeletedAt == null &&
                                  el.TranslationLanguage.DeletedAt == null)
                     .Select(el => el.Value)
                     .FirstOrDefault()
             })
             .ToListAsync();
+
+        if (dtos.Count == 0)
+        {
+            return (null, new NotFoundError("Translation not found"));
+        }
 
         return (dtos, null);
     }

@@ -10,7 +10,7 @@ public class TranslationEndpoint : IEndpoints
     public IEndpointRouteBuilder MapEndpoints(IEndpointRouteBuilder endpoints)
     {
         var group = endpoints
-            .MapGroup("/translation/{appKey}/{culture}")
+            .MapGroup("/translation/{appKey}/{locale}")
             .WithTags("Translation")
             .RequireAuthorization();
 
@@ -22,9 +22,9 @@ public class TranslationEndpoint : IEndpoints
         return group;
     }
 
-    private static async Task<IResult> GetListAsync(Guid appKey, string culture, TranslationService service)
+    private static async Task<IResult> GetListAsync(Guid appKey, string locale, TranslationService service)
     {
-        var result = await service.GetListAsync(appKey, culture);
+        var result = await service.GetListAsync(appKey, locale);
         return result.Response();
     }
 }
