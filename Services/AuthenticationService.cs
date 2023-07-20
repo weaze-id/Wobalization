@@ -3,9 +3,9 @@ using FluentValidation.Results;
 using IdGen;
 using Kern.Error;
 using Microsoft.EntityFrameworkCore;
+using Wobalization.Database.DatabaseContexts;
+using Wobalization.Database.Models;
 using Wobalization.Dtos.Authentication;
-using Wobalization.Entities;
-using Wobalization.Entities.DatabaseContexts;
 using Wobalization.Models;
 
 namespace Wobalization.Services;

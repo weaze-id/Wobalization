@@ -1,7 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Wobalization.Database.Models;
 
-namespace Wobalization.Entities.Configurations;
+namespace Wobalization.Database.Configurations;
 
 public class AppConfiguration : IEntityTypeConfiguration<App>
 {

@@ -1,6 +1,7 @@
+using Wobalization.Database.Models;
 using Wobalization.Dtos.Language;
 
-namespace Wobalization.Entities.Extensions;
+namespace Wobalization.Database.Extensions;
 
 public static class TranslationLanguageExtensions
 {

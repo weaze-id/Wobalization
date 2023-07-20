@@ -12,12 +12,14 @@
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.5.2" />
     <PackageReference Include="IdGen" Version="3.0.3" />
     <PackageReference Include="Kern" Version="1.0.0" />
-    <PackageReference Include="Kern.AspNetCore" Version="1.0.2" />
+    <PackageReference Include="Kern.AspNetCore" Version="1.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.5">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.5" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.32.0" />
   </ItemGroup>
 
   <ItemGroup>

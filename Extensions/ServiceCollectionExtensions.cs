@@ -1,6 +1,6 @@
 using IdGen;
 using Microsoft.EntityFrameworkCore;
-using Wobalization.Entities.DatabaseContexts;
+using Wobalization.Database.DatabaseContexts;
 
 namespace Wobalization.Extensions;
 

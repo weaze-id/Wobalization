@@ -1,4 +1,4 @@
-namespace Wobalization.Entities;
+namespace Wobalization.Database.Models;
 
 public class TranslationKey
 {

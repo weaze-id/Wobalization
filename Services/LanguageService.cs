@@ -4,10 +4,10 @@ using IdGen;
 using Kern.Error;
 using Kern.Extensions;
 using Microsoft.EntityFrameworkCore;
+using Wobalization.Database.DatabaseContexts;
+using Wobalization.Database.Extensions;
+using Wobalization.Database.Models;
 using Wobalization.Dtos.Language;
-using Wobalization.Entities;
-using Wobalization.Entities.DatabaseContexts;
-using Wobalization.Entities.Extensions;
 
 namespace Wobalization.Services;
 

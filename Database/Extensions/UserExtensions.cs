@@ -1,6 +1,7 @@
+using Wobalization.Database.Models;
 using Wobalization.Dtos.User;
 
-namespace Wobalization.Entities.Extensions;
+namespace Wobalization.Database.Extensions;
 
 public static class UserExtensions
 {

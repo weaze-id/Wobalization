@@ -1,7 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using Wobalization.Entities.Configurations;
+using Wobalization.Database.Configurations;
+using Wobalization.Database.Models;
 
-namespace Wobalization.Entities.DatabaseContexts;
+namespace Wobalization.Database.DatabaseContexts;
 
 public class DatabaseContext : DbContext
 {

@@ -449,6 +449,39 @@
         }
       }
     },
+    "/app/{appId}/key/{id}/value": {
+      "post": {
+        "tags": [
+          "Key"
+        ],
+        "operationId": "Add new value to existing key",
+        "parameters": [
+          {
+            "name": "appId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/app/{appId}/language": {
       "get": {
         "tags": [
@@ -777,255 +810,6 @@
           }
         }
       }
-    },
-    "/app/{appId}/language/{languageId}/value": {
-      "get": {
-        "tags": [
-          "Value"
-        ],
-        "operationId": "Get a list of value",
-        "parameters": [
-          {
-            "name": "appId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          },
-          {
-            "name": "languageId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          },
-          {
-            "name": "search",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "lastId",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/OutValueDto"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Value"
-        ],
-        "operationId": "Add new value",
-        "parameters": [
-          {
-            "name": "appId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          },
-          {
-            "name": "languageId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/InValueDto"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/OutValueDto"
-                }
-              }
-            }
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "Value"
-        ],
-        "operationId": "Update existing value",
-        "parameters": [
-          {
-            "name": "appId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          },
-          {
-            "name": "languageId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          },
-          {
-            "name": "id",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/InValueDto"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/OutValueDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/app/{appId}/language/{languageId}/value/{id}": {
-      "get": {
-        "tags": [
-          "Value"
-        ],
-        "operationId": "Get a value by id",
-        "parameters": [
-          {
-            "name": "appId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          },
-          {
-            "name": "languageId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          },
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/OutValueDto"
-                }
-              }
-            }
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "Value"
-        ],
-        "operationId": "Delete existing value",
-        "parameters": [
-          {
-            "name": "appId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          },
-          {
-            "name": "languageId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          },
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success"
-          }
-        }
-      }
     }
   },
   "components": {
@@ -1135,24 +919,6 @@
         },
         "additionalProperties": false
       },
-      "InValueDto": {
-        "required": [
-          "keyId",
-          "value"
-        ],
-        "type": "object",
-        "properties": {
-          "keyId": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "value": {
-            "minLength": 1,
-            "type": "string"
-          }
-        },
-        "additionalProperties": false
-      },
       "OutAppDto": {
         "type": "object",
         "properties": {
@@ -1200,12 +966,44 @@
             "type": "string",
             "nullable": true
           },
+          "values": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OutKeyValueDto"
+            },
+            "nullable": true
+          },
           "createdAt": {
             "type": "integer",
             "format": "int64",
             "nullable": true
           },
           "updatedAt": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OutKeyValueDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "languageId": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "value": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
             "type": "integer",
             "format": "int64",
             "nullable": true
@@ -1261,41 +1059,6 @@
             "nullable": true
           },
           "username": {
-            "type": "string",
-            "nullable": true
-          },
-          "createdAt": {
-            "type": "integer",
-            "format": "int64",
-            "nullable": true
-          },
-          "updatedAt": {
-            "type": "integer",
-            "format": "int64",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "OutValueDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64",
-            "nullable": true
-          },
-          "keyId": {
-            "type": "integer",
-            "format": "int64",
-            "nullable": true
-          },
-          "languageId": {
-            "type": "integer",
-            "format": "int64",
-            "nullable": true
-          },
-          "value": {
             "type": "string",
             "nullable": true
           },

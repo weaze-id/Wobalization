@@ -1,22 +1,23 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Wobalization.Database.Models;
 
-namespace Wobalization.Entities.Configurations;
+namespace Wobalization.Database.Configurations;
 
-public class TranslationValueConfiguration : IEntityTypeConfiguration<TranslationValue>
+public class TranslationKeyConfiguration : IEntityTypeConfiguration<TranslationKey>
 {
-    public void Configure(EntityTypeBuilder<TranslationValue> builder)
+    public void Configure(EntityTypeBuilder<TranslationKey> builder)
     {
         builder
             .Property(e => e.Id)
             .IsRequired();
 
         builder
-            .Property(e => e.TranslationLanguageId)
+            .Property(e => e.AppId)
             .IsRequired();
 
         builder
-            .Property(e => e.Value)
+            .Property(e => e.Key)
             .IsRequired();
 
         builder

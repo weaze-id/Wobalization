@@ -1,6 +1,7 @@
+using Wobalization.Database.Models;
 using Wobalization.Dtos.App;
 
-namespace Wobalization.Entities.Extensions;
+namespace Wobalization.Database.Extensions;
 
 public static class AppExtensions
 {
