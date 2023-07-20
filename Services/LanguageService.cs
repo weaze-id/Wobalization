@@ -45,8 +45,8 @@ public class LanguageService
     {
         // Check if the app exist
         var isAppExist = await _dbContext.App!
-            .HasId(appId)
-            .NotDeleted()
+            .Where(e => e.Id == appId &&
+                        e.DeletedAt == null)
             .AnyAsync();
 
         if (!isAppExist)
@@ -55,9 +55,9 @@ public class LanguageService
         }
 
         var dto = await _dbContext.TranslationLanguage!
-            .HasId(id)
-            .HasAppId(appId)
-            .NotDeleted()
+            .Where(e => e.Id == id &&
+                        e.AppId == appId &&
+                        e.DeletedAt == null)
             .SelectDto()
             .FirstOrDefaultAsync();
 
@@ -73,12 +73,12 @@ public class LanguageService
     /// Get a list of all languages.
     /// </summary>
     /// <returns>A tuple containing the list of language DTOs and an error if any.</returns>
-    public async Task<(List<OutLanguageDto>?, ErrorBase?)> GetListAsync(long appId)
+    public async Task<(List<OutLanguageDto>?, ErrorBase?)> GetListAsync(long appId, string? search, int? page)
     {
         // Check if the app exist
         var isAppExist = await _dbContext.App!
-            .HasId(appId)
-            .NotDeleted()
+            .Where(e => e.Id == appId &&
+                        e.DeletedAt == null)
             .AnyAsync();
 
         if (!isAppExist)
@@ -87,8 +87,9 @@ public class LanguageService
         }
 
         var dtos = await _dbContext.TranslationLanguage!
-            .HasAppId(appId)
-            .NotDeleted()
+            .Where(e => e.AppId == appId &&
+                        e.DeletedAt == null)
+            .SearchAndPaginate(search, page)
             .SelectDto()
             .ToListAsync();
 
@@ -111,8 +112,8 @@ public class LanguageService
 
         // Check if the app exist
         var isAppExist = await _dbContext.App!
-            .HasId(appId)
-            .NotDeleted()
+            .Where(e => e.Id == appId &&
+                        e.DeletedAt == null)
             .AnyAsync();
 
         if (!isAppExist)
@@ -122,9 +123,9 @@ public class LanguageService
 
         // Check if the culture is already exist
         var isCultureExist = await _dbContext.TranslationLanguage!
-            .HasAppId(appId)
-            .HasCulture(dto.Culture!)
-            .NotDeleted()
+            .Where(e => e.AppId == appId &&
+                        e.Culture!.ToLower() == dto.Culture!.ToLower() &&
+                        e.DeletedAt == null)
             .AnyAsync();
 
         if (isCultureExist)
@@ -169,8 +170,8 @@ public class LanguageService
 
         // Check if the app exist
         var isAppExist = await _dbContext.App!
-            .HasId(appId)
-            .NotDeleted()
+            .Where(e => e.Id == appId &&
+                        e.DeletedAt == null)
             .AnyAsync();
 
         if (!isAppExist)
@@ -181,9 +182,9 @@ public class LanguageService
         // Update the language with the provided information
         var language = await _dbContext.TranslationLanguage!
             .AsTracking()
-            .HasId(id)
-            .HasAppId(appId)
-            .NotDeleted()
+            .Where(e => e.Id == id &&
+                        e.AppId == appId &&
+                        e.DeletedAt == null)
             .FirstOrDefaultAsync();
 
         if (language == null)
@@ -196,10 +197,10 @@ public class LanguageService
 
         // Check if the culture is already exist
         var isCultureExist = await _dbContext.TranslationLanguage!
-            .HasAppId(appId)
-            .HasCulture(dto.Culture!)
-            .ExceptId(id)
-            .NotDeleted()
+            .Where(e => e.Id != id &&
+                        e.AppId == appId &&
+                        e.Culture!.ToLower() == dto.Culture!.ToLower() &&
+                        e.DeletedAt == null)
             .AnyAsync();
 
         if (isCultureExist)
@@ -223,8 +224,8 @@ public class LanguageService
     {
         // Check if the app exist
         var isAppExist = await _dbContext.App!
-            .HasId(appId)
-            .NotDeleted()
+            .Where(e => e.Id == appId &&
+                        e.DeletedAt == null)
             .AnyAsync();
 
         if (!isAppExist)
@@ -235,9 +236,9 @@ public class LanguageService
         // Delete the language
         var language = await _dbContext.TranslationLanguage!
             .AsTracking()
-            .HasId(id)
-            .HasAppId(appId)
-            .NotDeleted()
+            .Where(e => e.Id == id &&
+                        e.AppId == appId &&
+                        e.DeletedAt == null)
             .FirstOrDefaultAsync();
 
         if (language == null)

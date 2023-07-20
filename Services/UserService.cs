@@ -42,83 +42,6 @@ public class UserService
     }
 
     /// <summary>
-    /// Add a new user.
-    /// </summary>
-    /// <param name="dto">The user data to add.</param>
-    /// <returns>A tuple containing the added user DTO, validation results, and an error if any.</returns>
-    public async Task<(OutUserDto?, ValidationResult?, ErrorBase?)> AddAsync(InUserDto dto)
-    {
-        // Validate the DTO
-        var validationResult = _validator.Validate(dto);
-        if (!validationResult.IsValid)
-        {
-            return (null, validationResult, null);
-        }
-
-        // Check if the username is already used
-        var isUsernameUsed = await _dbContext.User!
-            .HasUsername(dto.Username!)
-            .NotDeleted()
-            .AnyAsync();
-
-        if (isUsernameUsed)
-        {
-            return (null, null, new ConflictError("Username already used"));
-        }
-
-        // Create a new user with the provided information
-        var user = new User
-        {
-            Id = _idGenerator.CreateId(),
-            FullName = dto.FullName.EmptyToNull(),
-            Username = dto.Username.EmptyToNull(),
-            Password = BC.HashPassword("secret123"),
-            CreatedAt = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()
-        };
-
-        // Add the user to the database and save changes
-        await _dbContext.User!.AddAsync(user);
-        await _dbContext.SaveChangesAsync();
-
-        var (outDto, outDtoError) = await GetAsync(user.Id.GetValueOrDefault());
-        return (outDto, null, outDtoError);
-    }
-
-    /// <summary>
-    /// Delete a user with the specified ID.
-    /// </summary>
-    /// <param name="id">The ID of the user to delete.</param>
-    /// <returns>An error if any.</returns>
-    public async Task<ErrorBase?> DeleteAsync(long id)
-    {
-        // Get user identity
-        var (identity, identityError) = _identityService.Get();
-        if (identityError != null)
-        {
-            return identityError;
-        }
-
-        // Delete the user
-        var user = await _dbContext.User!
-            .AsTracking()
-            .HasId(id)
-            .ExceptId(identity!.Id.GetValueOrDefault())
-            .NotDeleted()
-            .FirstOrDefaultAsync();
-
-        if (user == null)
-        {
-            return new NotFoundError("User not found");
-        }
-
-        user.DeletedAt = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-
-        // Save changes
-        await _dbContext.SaveChangesAsync();
-        return null;
-    }
-
-    /// <summary>
     /// Get a user with the specified ID.
     /// </summary>
     /// <param name="id">The ID of the user to retrieve.</param>
@@ -126,8 +49,8 @@ public class UserService
     public async Task<(OutUserDto?, ErrorBase?)> GetAsync(long id)
     {
         var dto = await _dbContext.User!
-            .HasId(id)
-            .NotDeleted()
+            .Where(e => e.Id == id &&
+                        e.DeletedAt == null)
             .SelectDto()
             .FirstOrDefaultAsync();
 
@@ -143,14 +66,58 @@ public class UserService
     /// Get a list of all users.
     /// </summary>
     /// <returns>A tuple containing the list of user DTOs and an error if any.</returns>
-    public async Task<(List<OutUserDto>?, ErrorBase?)> GetListAsync()
+    public async Task<(List<OutUserDto>?, ErrorBase?)> GetListAsync(string? search, int? page)
     {
         var dtos = await _dbContext.User!
-            .NotDeleted()
+            .Where(e => e.DeletedAt == null)
+            .SearchAndPaginate(search, page)
             .SelectDto()
             .ToListAsync();
 
         return (dtos, null);
+    }
+
+    /// <summary>
+    /// Add a new user.
+    /// </summary>
+    /// <param name="dto">The user data to add.</param>
+    /// <returns>A tuple containing the added user DTO, validation results, and an error if any.</returns>
+    public async Task<(OutUserDto?, ValidationResult?, ErrorBase?)> AddAsync(InUserDto dto)
+    {
+        // Validate the DTO
+        var validationResult = _validator.Validate(dto);
+        if (!validationResult.IsValid)
+        {
+            return (null, validationResult, null);
+        }
+
+        // Check if the username is already used
+        var isUsernameUsed = await _dbContext.User!
+            .Where(e => e.Username!.ToLower() == dto.Username!.ToLower() &&
+                        e.DeletedAt == null)
+            .AnyAsync();
+
+        if (isUsernameUsed)
+        {
+            return (null, null, new ConflictError("Username already used"));
+        }
+
+        // Create a new user with the provided information
+        var user = new User
+        {
+            Id = _idGenerator.CreateId(),
+            FullName = dto.FullName.EmptyToNull(),
+            Username = dto.Username.EmptyToNull()?.ToLower(),
+            Password = BC.HashPassword("secret123"),
+            CreatedAt = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()
+        };
+
+        // Add the user to the database and save changes
+        await _dbContext.User!.AddAsync(user);
+        await _dbContext.SaveChangesAsync();
+
+        var (outDto, outDtoError) = await GetAsync(user.Id.GetValueOrDefault());
+        return (outDto, null, outDtoError);
     }
 
     /// <summary>
@@ -178,8 +145,8 @@ public class UserService
         // Update the user with the provided information
         var user = await _dbContext.User!
             .AsTracking()
-            .HasId(id)
-            .NotDeleted()
+            .Where(e => e.Id == id &&
+                        e.DeletedAt == null)
             .FirstOrDefaultAsync();
 
         if (user == null)
@@ -193,9 +160,9 @@ public class UserService
 
         // Check if the username is already used
         var isUsernameUsed = await _dbContext.User!
-            .HasUsername(dto.Username!)
-            .ExceptId(id)
-            .NotDeleted()
+            .Where(e => e.Id != id &&
+                        e.Username!.ToLower() == dto.Username!.ToLower() &&
+                        e.DeletedAt == null)
             .AnyAsync();
 
         if (isUsernameUsed)
@@ -208,5 +175,39 @@ public class UserService
 
         var (outDto, outDtoError) = await GetAsync(id);
         return (outDto, null, outDtoError);
+    }
+
+    /// <summary>
+    /// Delete a user with the specified ID.
+    /// </summary>
+    /// <param name="id">The ID of the user to delete.</param>
+    /// <returns>An error if any.</returns>
+    public async Task<ErrorBase?> DeleteAsync(long id)
+    {
+        // Get user identity
+        var (identity, identityError) = _identityService.Get();
+        if (identityError != null)
+        {
+            return identityError;
+        }
+
+        // Delete the user
+        var user = await _dbContext.User!
+            .AsTracking()
+            .Where(e => e.Id == id &&
+                        e.Id != identity!.Id &&
+                        e.DeletedAt == null)
+            .FirstOrDefaultAsync();
+
+        if (user == null)
+        {
+            return new NotFoundError("User not found");
+        }
+
+        user.DeletedAt = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+
+        // Save changes
+        await _dbContext.SaveChangesAsync();
+        return null;
     }
 }

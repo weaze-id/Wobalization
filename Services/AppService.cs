@@ -37,6 +37,42 @@ public class AppService
     }
 
     /// <summary>
+    /// Get a app with the specified ID.
+    /// </summary>
+    /// <param name="id">The ID of the app to retrieve.</param>
+    /// <returns>A tuple containing the app DTO and an error if any.</returns>
+    public async Task<(OutAppDto?, ErrorBase?)> GetAsync(long id)
+    {
+        var dto = await _dbContext.App!
+            .Where(e => e.Id == id &&
+                        e.DeletedAt == null)
+            .SelectDto()
+            .FirstOrDefaultAsync();
+
+        if (dto == null)
+        {
+            return (null, new NotFoundError("App not found"));
+        }
+
+        return (dto, null);
+    }
+
+    /// <summary>
+    /// Get a list of all apps.
+    /// </summary>
+    /// <returns>A tuple containing the list of app DTOs and an error if any.</returns>
+    public async Task<(List<OutAppDto>?, ErrorBase?)> GetListAsync(string? search, int? page)
+    {
+        var dtos = await _dbContext.App!
+            .Where(e => e.DeletedAt == null)
+            .SearchAndPaginate(search, page)
+            .SelectDto()
+            .ToListAsync();
+
+        return (dtos, null);
+    }
+
+    /// <summary>
     /// Add a new app.
     /// </summary>
     /// <param name="dto">The app data to add.</param>
@@ -52,8 +88,8 @@ public class AppService
 
         // Check if the appname is already used
         var isAppNameUsed = await _dbContext.App!
-            .HasName(dto.Name!)
-            .NotDeleted()
+            .Where(e => e.Name!.ToLower() == dto.Name! &&
+                        e.DeletedAt == null)
             .AnyAsync();
 
         if (isAppNameUsed)
@@ -79,67 +115,6 @@ public class AppService
     }
 
     /// <summary>
-    /// Delete a app with the specified ID.
-    /// </summary>
-    /// <param name="id">The ID of the app to delete.</param>
-    /// <returns>An error if any.</returns>
-    public async Task<ErrorBase?> DeleteAsync(long id)
-    {
-        // Delete the app
-        var app = await _dbContext.App!
-            .AsTracking()
-            .HasId(id)
-            .NotDeleted()
-            .FirstOrDefaultAsync();
-
-        if (app == null)
-        {
-            return new NotFoundError("App not found");
-        }
-
-        app.DeletedAt = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-
-        // Save changes
-        await _dbContext.SaveChangesAsync();
-        return null;
-    }
-
-    /// <summary>
-    /// Get a app with the specified ID.
-    /// </summary>
-    /// <param name="id">The ID of the app to retrieve.</param>
-    /// <returns>A tuple containing the app DTO and an error if any.</returns>
-    public async Task<(OutAppDto?, ErrorBase?)> GetAsync(long id)
-    {
-        var dto = await _dbContext.App!
-            .HasId(id)
-            .NotDeleted()
-            .SelectDto()
-            .FirstOrDefaultAsync();
-
-        if (dto == null)
-        {
-            return (null, new NotFoundError("App not found"));
-        }
-
-        return (dto, null);
-    }
-
-    /// <summary>
-    /// Get a list of all apps.
-    /// </summary>
-    /// <returns>A tuple containing the list of app DTOs and an error if any.</returns>
-    public async Task<(List<OutAppDto>?, ErrorBase?)> GetListAsync()
-    {
-        var dtos = await _dbContext.App!
-            .NotDeleted()
-            .SelectDto()
-            .ToListAsync();
-
-        return (dtos, null);
-    }
-
-    /// <summary>
     /// Update a app with the specified ID.
     /// </summary>
     /// <param name="id">The ID of the app to update.</param>
@@ -157,8 +132,8 @@ public class AppService
         // Update the app with the provided information
         var app = await _dbContext.App!
             .AsTracking()
-            .HasId(id)
-            .NotDeleted()
+            .Where(e => e.Id == id &&
+                        e.DeletedAt == null)
             .FirstOrDefaultAsync();
 
         if (app == null)
@@ -171,9 +146,9 @@ public class AppService
 
         // Check if the appname is already used
         var isAppNameUsed = await _dbContext.App!
-            .HasName(dto.Name!)
-            .ExceptId(id)
-            .NotDeleted()
+            .Where(e => e.Id != id &&
+                        e.Name!.ToLower() == dto.Name &&
+                        e.DeletedAt == null)
             .AnyAsync();
 
         if (isAppNameUsed)
@@ -186,5 +161,31 @@ public class AppService
 
         var (outDto, outDtoError) = await GetAsync(id);
         return (outDto, null, outDtoError);
+    }
+
+    /// <summary>
+    /// Delete a app with the specified ID.
+    /// </summary>
+    /// <param name="id">The ID of the app to delete.</param>
+    /// <returns>An error if any.</returns>
+    public async Task<ErrorBase?> DeleteAsync(long id)
+    {
+        // Delete the app
+        var app = await _dbContext.App!
+            .AsTracking()
+            .Where(e => e.Id == id &&
+                        e.DeletedAt == null)
+            .FirstOrDefaultAsync();
+
+        if (app == null)
+        {
+            return new NotFoundError("App not found");
+        }
+
+        app.DeletedAt = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+
+        // Save changes
+        await _dbContext.SaveChangesAsync();
+        return null;
     }
 }

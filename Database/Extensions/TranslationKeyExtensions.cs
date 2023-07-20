@@ -1,3 +1,4 @@
+using Wobalization.Database.DatabaseContexts;
 using Wobalization.Database.Models;
 using Wobalization.Dtos.Key;
 
@@ -5,29 +6,22 @@ namespace Wobalization.Database.Extensions;
 
 public static class TranslationKeyExtensions
 {
-    public static IQueryable<TranslationKey> HasId(this IQueryable<TranslationKey> queryable, long id)
+    public static IQueryable<TranslationKey> SearchAndPaginate(this IQueryable<TranslationKey> queryable, string? search, int? page)
     {
-        return queryable.Where(e => e.Id == id);
-    }
+        if (search != null)
+        {
+            queryable = queryable.Where(e => e.Key!.ToLower().Contains(search.ToLower()));
+        }
 
-    public static IQueryable<TranslationKey> ExceptId(this IQueryable<TranslationKey> queryable, long id)
-    {
-        return queryable.Where(e => e.Id != id);
-    }
+        if (page != null)
+        {
+            queryable = queryable
+                .Skip(page < 2 ? 0 : (page.GetValueOrDefault() - 1) * DatabaseContext.PaginationSize);
+        }
 
-    public static IQueryable<TranslationKey> HasAppId(this IQueryable<TranslationKey> queryable, long appId)
-    {
-        return queryable.Where(e => e.AppId == appId);
-    }
-
-    public static IQueryable<TranslationKey> HasKey(this IQueryable<TranslationKey> queryable, string key)
-    {
-        return queryable.Where(e => e.Key!.ToLower() == key.ToLower());
-    }
-
-    public static IQueryable<TranslationKey> NotDeleted(this IQueryable<TranslationKey> queryable)
-    {
-        return queryable.Where(e => e.DeletedAt == null);
+        return queryable
+            .OrderBy(e => e.Key)
+            .Take(DatabaseContext.PaginationSize);
     }
 
     public static IQueryable<OutKeyDto> SelectDto(this IQueryable<TranslationKey> queryable)

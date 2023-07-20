@@ -45,9 +45,9 @@ public class KeyEndpoint : IEndpoints
         return group;
     }
 
-    private static async Task<IResult> GetListAsync(long appId, string? search, long? lastId, KeyService service)
+    private static async Task<IResult> GetListAsync(long appId, string? search, int? page, KeyService service)
     {
-        var result = await service.GetListAsync(appId, search, lastId);
+        var result = await service.GetListAsync(appId, search, page);
         return result.Response();
     }
 

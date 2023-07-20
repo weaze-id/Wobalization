@@ -36,35 +36,6 @@ public class KeyService
     }
 
     /// <summary>
-    /// Retrieves a list of keys for a given app from the database.
-    /// </summary>
-    /// <param name="appId">The ID of the app.</param>
-    /// <returns>
-    /// A tuple containing a list of key DTOs if successful; otherwise, an error base object.
-    /// </returns>
-    public async Task<(List<OutKeyDto>?, ErrorBase?)> GetListAsync(long appId, string? search, long? lastId)
-    {
-        // Check if the app exists
-        var isAppExist = await _dbContext.App!
-            .HasId(appId)
-            .NotDeleted()
-            .AnyAsync();
-
-        if (!isAppExist)
-        {
-            return (null, new NotFoundError("App not found"));
-        }
-
-        var dtos = await _dbContext.TranslationKey!
-            .HasAppId(appId)
-            .NotDeleted()
-            .SelectDto()
-            .ToListAsync();
-
-        return (dtos, null);
-    }
-
-    /// <summary>
     /// Retrieves a key with the specified ID for a given app from the database.
     /// </summary>
     /// <param name="appId">The ID of the app.</param>
@@ -76,8 +47,8 @@ public class KeyService
     {
         // Check if the app exists
         var isAppExist = await _dbContext.App!
-            .HasId(appId)
-            .NotDeleted()
+            .Where(e => e.Id == appId &&
+                        e.DeletedAt == null)
             .AnyAsync();
 
         if (!isAppExist)
@@ -86,9 +57,9 @@ public class KeyService
         }
 
         var dto = await _dbContext.TranslationKey!
-            .HasId(id)
-            .HasAppId(appId)
-            .NotDeleted()
+            .Where(e => e.Id == appId &&
+                        e.AppId == appId &&
+                        e.DeletedAt == null)
             .SelectDto()
             .FirstOrDefaultAsync();
 
@@ -98,6 +69,36 @@ public class KeyService
         }
 
         return (dto, null);
+    }
+
+    /// <summary>
+    /// Retrieves a list of keys for a given app from the database.
+    /// </summary>
+    /// <param name="appId">The ID of the app.</param>
+    /// <returns>
+    /// A tuple containing a list of key DTOs if successful; otherwise, an error base object.
+    /// </returns>
+    public async Task<(List<OutKeyDto>?, ErrorBase?)> GetListAsync(long appId, string? search, int? page)
+    {
+        // Check if the app exists
+        var isAppExist = await _dbContext.App!
+            .Where(e => e.Id == appId &&
+                        e.DeletedAt == null)
+            .AnyAsync();
+
+        if (!isAppExist)
+        {
+            return (null, new NotFoundError("App not found"));
+        }
+
+        var dtos = await _dbContext.TranslationKey!
+            .Where(e => e.AppId == appId &&
+                        e.DeletedAt == null)
+            .SearchAndPaginate(search, page)
+            .SelectDto()
+            .ToListAsync();
+
+        return (dtos, null);
     }
 
     /// <summary>
@@ -119,8 +120,8 @@ public class KeyService
 
         // Check if the app exists
         var isAppExist = await _dbContext.App!
-            .HasId(appId)
-            .NotDeleted()
+            .Where(e => e.Id == appId &&
+                        e.DeletedAt == null)
             .AnyAsync();
 
         if (!isAppExist)
@@ -130,9 +131,9 @@ public class KeyService
 
         // Check if the key already exists
         var isKeyExist = await _dbContext.TranslationKey!
-            .HasAppId(appId)
-            .HasKey(dto.Key!)
-            .NotDeleted()
+            .Where(e => e.AppId == appId &&
+                        e.Key!.ToLower() == dto.Key!.ToLower() &&
+                        e.DeletedAt == null)
             .AnyAsync();
 
         if (isKeyExist)
@@ -181,8 +182,8 @@ public class KeyService
 
         // Check if the app exists
         var isAppExist = await _dbContext.App!
-            .HasId(appId)
-            .NotDeleted()
+            .Where(e => e.Id == appId &&
+                        e.DeletedAt == null)
             .AnyAsync();
 
         if (!isAppExist)
@@ -192,9 +193,9 @@ public class KeyService
 
         // Check if the key exists
         var isKeyExist = await _dbContext.TranslationKey!
-            .HasId(keyId)
-            .HasAppId(appId)
-            .NotDeleted()
+            .Where(e => e.Id == keyId &&
+                        e.AppId == appId &&
+                        e.DeletedAt == null)
             .AnyAsync();
 
         if (!isKeyExist)
@@ -204,9 +205,9 @@ public class KeyService
 
         // Check if the language exists
         var isLanguageExist = await _dbContext.TranslationLanguage!
-            .HasId(dto.LanguageId.GetValueOrDefault())
-            .HasAppId(appId)
-            .NotDeleted()
+            .Where(e => e.Id == dto.LanguageId.GetValueOrDefault() &&
+                        e.AppId == appId &&
+                        e.DeletedAt == null)
             .AnyAsync();
 
         if (!isLanguageExist)
@@ -266,8 +267,8 @@ public class KeyService
 
         // Check if the app exists
         var isAppExist = await _dbContext.App!
-            .HasId(appId)
-            .NotDeleted()
+            .Where(e => e.Id == appId &&
+                        e.DeletedAt == null)
             .AnyAsync();
 
         if (!isAppExist)
@@ -277,10 +278,10 @@ public class KeyService
 
         // Check if the key already exists
         var isKeyExist = await _dbContext.TranslationKey!
-            .ExceptId(id)
-            .HasAppId(appId)
-            .HasKey(dto.Key!)
-            .NotDeleted()
+            .Where(e => e.Id != id &&
+                        e.AppId == appId &&
+                        e.Key!.ToLower() == dto.Key!.ToLower() &&
+                        e.DeletedAt == null)
             .AnyAsync();
 
         if (isKeyExist)
@@ -291,9 +292,9 @@ public class KeyService
         // Get key by ID
         var translationKey = await _dbContext.TranslationKey!
             .AsTracking()
-            .HasId(id)
-            .HasAppId(appId)
-            .NotDeleted()
+            .Where(e => e.Id == id &&
+                        e.AppId == appId &&
+                        e.DeletedAt == null)
             .FirstOrDefaultAsync();
 
         if (translationKey == null)
@@ -320,8 +321,8 @@ public class KeyService
     {
         // Check if the app exists
         var isAppExist = await _dbContext.App!
-            .HasId(appId)
-            .NotDeleted()
+            .Where(e => e.Id == appId &&
+                        e.DeletedAt == null)
             .AnyAsync();
 
         if (!isAppExist)
@@ -332,9 +333,9 @@ public class KeyService
         // Delete the key
         var translationKey = await _dbContext.TranslationKey!
             .AsTracking()
-            .HasId(id)
-            .HasAppId(appId)
-            .NotDeleted()
+            .Where(e => e.Id == id &&
+                        e.AppId == appId &&
+                        e.DeletedAt == null)
             .FirstOrDefaultAsync();
 
         if (translationKey == null)

@@ -41,9 +41,9 @@ public class LanguageEndpoint : IEndpoints
         return group;
     }
 
-    private static async Task<IResult> GetListAsync(long appId, LanguageService service)
+    private static async Task<IResult> GetListAsync(long appId, string? search, int? page, LanguageService service)
     {
-        var result = await service.GetListAsync(appId);
+        var result = await service.GetListAsync(appId, search, page);
         return result.Response();
     }
 

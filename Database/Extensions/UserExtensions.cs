@@ -1,3 +1,4 @@
+using Wobalization.Database.DatabaseContexts;
 using Wobalization.Database.Models;
 using Wobalization.Dtos.User;
 
@@ -5,24 +6,24 @@ namespace Wobalization.Database.Extensions;
 
 public static class UserExtensions
 {
-    public static IQueryable<User> HasId(this IQueryable<User> queryable, long id)
+    public static IQueryable<User> SearchAndPaginate(this IQueryable<User> queryable, string? search, int? page)
     {
-        return queryable.Where(e => e.Id == id);
-    }
+        if (search != null)
+        {
+            queryable = queryable
+                .Where(e => e.FullName!.ToLower().Contains(search.ToLower()) ||
+                            e.Username!.ToLower().Contains(search.ToLower()));
+        }
 
-    public static IQueryable<User> ExceptId(this IQueryable<User> queryable, long id)
-    {
-        return queryable.Where(e => e.Id != id);
-    }
+        if (page != null)
+        {
+            queryable = queryable
+                .Skip(page < 2 ? 0 : (page.GetValueOrDefault() - 1) * DatabaseContext.PaginationSize);
+        }
 
-    public static IQueryable<User> HasUsername(this IQueryable<User> queryable, string username)
-    {
-        return queryable.Where(e => e.Username!.ToLower() == username.ToLower());
-    }
-
-    public static IQueryable<User> NotDeleted(this IQueryable<User> queryable)
-    {
-        return queryable.Where(e => e.DeletedAt == null);
+        return queryable
+            .OrderBy(e => e.FullName)
+            .Take(DatabaseContext.PaginationSize);
     }
 
     public static IQueryable<OutUserDto> SelectDto(this IQueryable<User> queryable)

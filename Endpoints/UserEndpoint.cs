@@ -41,9 +41,9 @@ public class UserEndpoint : IEndpoints
         return group;
     }
 
-    private static async Task<IResult> GetListAsync(UserService service)
+    private static async Task<IResult> GetListAsync(string? search, int? page, UserService service)
     {
-        var result = await service.GetListAsync();
+        var result = await service.GetListAsync(search, page);
         return result.Response();
     }
 

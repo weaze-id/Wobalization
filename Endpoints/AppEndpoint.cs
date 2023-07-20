@@ -41,9 +41,9 @@ public class AppEndpoint : IEndpoints
         return group;
     }
 
-    private static async Task<IResult> GetListAsync(AppService service)
+    private static async Task<IResult> GetListAsync(string? search, int? page, AppService service)
     {
-        var result = await service.GetListAsync();
+        var result = await service.GetListAsync(search, page);
         return result.Response();
     }
 

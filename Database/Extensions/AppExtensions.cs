@@ -1,3 +1,4 @@
+using Wobalization.Database.DatabaseContexts;
 using Wobalization.Database.Models;
 using Wobalization.Dtos.App;
 
@@ -5,24 +6,22 @@ namespace Wobalization.Database.Extensions;
 
 public static class AppExtensions
 {
-    public static IQueryable<App> HasId(this IQueryable<App> queryable, long id)
+    public static IQueryable<App> SearchAndPaginate(this IQueryable<App> queryable, string? search, int? page)
     {
-        return queryable.Where(e => e.Id == id);
-    }
+        if (search != null)
+        {
+            queryable = queryable.Where(e => e.Name!.ToLower().Contains(search.ToLower()));
+        }
 
-    public static IQueryable<App> ExceptId(this IQueryable<App> queryable, long id)
-    {
-        return queryable.Where(e => e.Id != id);
-    }
+        if (page != null)
+        {
+            queryable = queryable
+                .Skip(page < 2 ? 0 : (page.GetValueOrDefault() - 1) * DatabaseContext.PaginationSize);
+        }
 
-    public static IQueryable<App> HasName(this IQueryable<App> queryable, string name)
-    {
-        return queryable.Where(e => e.Name!.ToLower() == name.ToLower());
-    }
-
-    public static IQueryable<App> NotDeleted(this IQueryable<App> queryable)
-    {
-        return queryable.Where(e => e.DeletedAt == null);
+        return queryable
+            .OrderBy(e => e.Name)
+            .Take(DatabaseContext.PaginationSize);
     }
 
     public static IQueryable<OutAppDto> SelectDto(this IQueryable<App> queryable)
