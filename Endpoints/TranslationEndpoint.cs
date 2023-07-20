@@ -11,8 +11,7 @@ public class TranslationEndpoint : IEndpoints
     {
         var group = endpoints
             .MapGroup("/translation/{appKey}/{locale}")
-            .WithTags("Translation")
-            .RequireAuthorization();
+            .WithTags("Translation");
 
         group
             .MapGet("/", GetListAsync)
