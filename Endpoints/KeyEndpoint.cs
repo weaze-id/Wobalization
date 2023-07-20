@@ -38,6 +38,10 @@ public class KeyEndpoint : IEndpoints
             .MapDelete("/{id}", DeleteAsync)
             .WithName("Delete existing key");
 
+        group
+            .MapPost("/{id}/value", DeleteAsync)
+            .WithName("Add new value to existing key");
+
         return group;
     }
 
@@ -68,6 +72,12 @@ public class KeyEndpoint : IEndpoints
     private static async Task<IResult> DeleteAsync(long appId, long id, KeyService service)
     {
         var result = await service.DeleteAsync(appId, id);
+        return result.Response();
+    }
+
+    private static async Task<IResult> AddValueAsync(long appId, long id, InKeyValueDto dto, KeyService service)
+    {
+        var result = await service.AddValueAsync(appId, id, dto);
         return result.Response();
     }
 }

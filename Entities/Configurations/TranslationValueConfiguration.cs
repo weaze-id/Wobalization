@@ -12,7 +12,7 @@ public class TranslationValueConfiguration : IEntityTypeConfiguration<Translatio
             .IsRequired();
 
         builder
-            .Property(e => e.LanguageId)
+            .Property(e => e.TranslationLanguageId)
             .IsRequired();
 
         builder

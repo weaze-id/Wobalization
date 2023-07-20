@@ -128,7 +128,7 @@ public class KeyService
 
         if (isKeyExist)
         {
-            return (null, null, new ConflictError("Key already exists"));
+            return (null, null, new NotFoundError("Key already exists"));
         }
 
         // Create a new key with the provided information
@@ -147,6 +147,87 @@ public class KeyService
         // Retrieve the added key
         var (outDto, outDtoError) = await GetAsync(appId, translationKey.Id.GetValueOrDefault());
         return (outDto, null, outDtoError);
+    }
+
+    /// <summary>
+    /// Adds a new value to the database.
+    /// </summary>
+    /// <param name="appId">The ID of the app.</param>
+    /// <param name="keyId">The ID of the language.</param>
+    /// <param name="dto">The input value DTO.</param>
+    /// <returns>
+    /// A tuple containing the output value DTO, the validation result, and the error base.
+    /// </returns>
+    public async Task<(ValidationResult?, ErrorBase?)> AddValueAsync(
+        long appId,
+        long keyId,
+        InKeyValueDto dto)
+    {
+        // Check if the app exists
+        var isAppExist = await _dbContext.App!
+            .HasId(appId)
+            .NotDeleted()
+            .AnyAsync();
+
+        if (isAppExist)
+        {
+            return (null, new NotFoundError("App not found"));
+        }
+
+        // Check if the key exists
+        var isKeyExist = await _dbContext.TranslationKey!
+            .HasId(keyId)
+            .HasAppId(appId)
+            .NotDeleted()
+            .AnyAsync();
+
+        if (isKeyExist)
+        {
+            return (null, new NotFoundError("Key not found"));
+        }
+
+        // Check if the language exists
+        var isLanguageExist = await _dbContext.TranslationLanguage!
+            .HasId(dto.LanguageId.GetValueOrDefault())
+            .HasAppId(appId)
+            .NotDeleted()
+            .AnyAsync();
+
+        if (isLanguageExist)
+        {
+            return (null, new NotFoundError("Language not found"));
+        }
+
+        var now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+
+        // Get existing translation value, if exist delete it
+        var existingTranslationValue = await _dbContext.TranslationValue!
+            .AsTracking()
+            .Where(e => e.TranslationKeyId == keyId &&
+                        e.TranslationLanguageId == dto.LanguageId &&
+                        e.DeletedAt == null)
+            .FirstOrDefaultAsync();
+
+        if (existingTranslationValue != null)
+        {
+            existingTranslationValue.DeletedAt = now;
+        }
+
+        // Create a new value with the provided information
+        var translationValue = new TranslationValue
+        {
+            Id = _idGenerator.CreateId(),
+            TranslationKeyId = keyId,
+            TranslationLanguageId = dto.LanguageId.GetValueOrDefault(),
+            Value = dto.Value.EmptyToNull(),
+            CreatedAt = now
+        };
+
+        // Add the value to the database and save changes
+        await _dbContext.TranslationValue!.AddAsync(translationValue);
+        await _dbContext.SaveChangesAsync();
+
+        return (null, null);
     }
 
     /// <summary>
@@ -181,7 +262,7 @@ public class KeyService
 
         if (isKeyExist)
         {
-            return (null, null, new ConflictError("Key already exists"));
+            return (null, null, new NotFoundError("Key already exists"));
         }
 
         // Get key by ID

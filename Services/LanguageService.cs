@@ -37,98 +37,6 @@ public class LanguageService
     }
 
     /// <summary>
-    /// Add a new language.
-    /// </summary>
-    /// <param name="dto">The language data to add.</param>
-    /// <returns>A tuple containing the added language DTO, validation results, and an error if any.</returns>
-    public async Task<(OutLanguageDto?, ValidationResult?, ErrorBase?)> AddAsync(long appId, InLanguageDto dto)
-    {
-        // Validate the DTO
-        var validationResult = _validator.Validate(dto);
-        if (!validationResult.IsValid)
-        {
-            return (null, validationResult, null);
-        }
-
-        // Check if the app exist
-        var isAppExist = await _dbContext.App!
-            .HasId(appId)
-            .NotDeleted()
-            .AnyAsync();
-
-        if (isAppExist)
-        {
-            return (null, null, new NotFoundError("App not found"));
-        }
-
-        // Check if the culture is already exist
-        var isCultureExist = await _dbContext.Language!
-            .HasAppId(appId)
-            .HasCulture(dto.Culture!)
-            .NotDeleted()
-            .AnyAsync();
-
-        if (isCultureExist)
-        {
-            return (null, null, new ConflictError("Language culture already exist"));
-        }
-
-        // Create a new language with the provided information
-        var language = new Language
-        {
-            Id = _idGenerator.CreateId(),
-            AppId = appId,
-            Culture = dto.Culture.EmptyToNull(),
-            CreatedAt = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()
-        };
-
-        // Add the language to the database and save changes
-        await _dbContext.Language!.AddAsync(language);
-        await _dbContext.SaveChangesAsync();
-
-        var (outDto, outDtoError) = await GetAsync(appId, language.Id.GetValueOrDefault());
-        return (outDto, null, outDtoError);
-    }
-
-    /// <summary>
-    /// Delete a language with the specified ID.
-    /// </summary>
-    /// <param name="id">The ID of the language to delete.</param>
-    /// <returns>An error if any.</returns>
-    public async Task<ErrorBase?> DeleteAsync(long appId, long id)
-    {
-        // Check if the app exist
-        var isAppExist = await _dbContext.App!
-            .HasId(appId)
-            .NotDeleted()
-            .AnyAsync();
-
-        if (isAppExist)
-        {
-            return new NotFoundError("App not found");
-        }
-
-        // Delete the language
-        var language = await _dbContext.Language!
-            .AsTracking()
-            .HasId(id)
-            .HasAppId(appId)
-            .NotDeleted()
-            .FirstOrDefaultAsync();
-
-        if (language == null)
-        {
-            return new NotFoundError("Language not found");
-        }
-
-        language.DeletedAt = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-
-        // Save changes
-        await _dbContext.SaveChangesAsync();
-        return null;
-    }
-
-    /// <summary>
     /// Get a language with the specified ID.
     /// </summary>
     /// <param name="id">The ID of the language to retrieve.</param>
@@ -146,7 +54,7 @@ public class LanguageService
             return (null, new NotFoundError("App not found"));
         }
 
-        var dto = await _dbContext.Language!
+        var dto = await _dbContext.TranslationLanguage!
             .HasId(id)
             .HasAppId(appId)
             .NotDeleted()
@@ -178,13 +86,67 @@ public class LanguageService
             return (null, new NotFoundError("App not found"));
         }
 
-        var dtos = await _dbContext.Language!
+        var dtos = await _dbContext.TranslationLanguage!
             .HasAppId(appId)
             .NotDeleted()
             .SelectDto()
             .ToListAsync();
 
         return (dtos, null);
+    }
+
+    /// <summary>
+    /// Add a new language.
+    /// </summary>
+    /// <param name="dto">The language data to add.</param>
+    /// <returns>A tuple containing the added language DTO, validation results, and an error if any.</returns>
+    public async Task<(OutLanguageDto?, ValidationResult?, ErrorBase?)> AddAsync(long appId, InLanguageDto dto)
+    {
+        // Validate the DTO
+        var validationResult = _validator.Validate(dto);
+        if (!validationResult.IsValid)
+        {
+            return (null, validationResult, null);
+        }
+
+        // Check if the app exist
+        var isAppExist = await _dbContext.App!
+            .HasId(appId)
+            .NotDeleted()
+            .AnyAsync();
+
+        if (isAppExist)
+        {
+            return (null, null, new NotFoundError("App not found"));
+        }
+
+        // Check if the culture is already exist
+        var isCultureExist = await _dbContext.TranslationLanguage!
+            .HasAppId(appId)
+            .HasCulture(dto.Culture!)
+            .NotDeleted()
+            .AnyAsync();
+
+        if (isCultureExist)
+        {
+            return (null, null, new NotFoundError("Language culture already exist"));
+        }
+
+        // Create a new language with the provided information
+        var language = new TranslationLanguage
+        {
+            Id = _idGenerator.CreateId(),
+            AppId = appId,
+            Culture = dto.Culture.EmptyToNull(),
+            CreatedAt = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()
+        };
+
+        // Add the language to the database and save changes
+        await _dbContext.TranslationLanguage!.AddAsync(language);
+        await _dbContext.SaveChangesAsync();
+
+        var (outDto, outDtoError) = await GetAsync(appId, language.Id.GetValueOrDefault());
+        return (outDto, null, outDtoError);
     }
 
     /// <summary>
@@ -217,7 +179,7 @@ public class LanguageService
         }
 
         // Update the language with the provided information
-        var language = await _dbContext.Language!
+        var language = await _dbContext.TranslationLanguage!
             .AsTracking()
             .HasId(id)
             .HasAppId(appId)
@@ -233,7 +195,7 @@ public class LanguageService
         language.UpdatedAt = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
         // Check if the culture is already exist
-        var isCultureExist = await _dbContext.Language!
+        var isCultureExist = await _dbContext.TranslationLanguage!
             .HasAppId(appId)
             .HasCulture(dto.Culture!)
             .ExceptId(id)
@@ -250,5 +212,43 @@ public class LanguageService
 
         var (outDto, outDtoError) = await GetAsync(appId, id);
         return (outDto, null, outDtoError);
+    }
+
+    /// <summary>
+    /// Delete a language with the specified ID.
+    /// </summary>
+    /// <param name="id">The ID of the language to delete.</param>
+    /// <returns>An error if any.</returns>
+    public async Task<ErrorBase?> DeleteAsync(long appId, long id)
+    {
+        // Check if the app exist
+        var isAppExist = await _dbContext.App!
+            .HasId(appId)
+            .NotDeleted()
+            .AnyAsync();
+
+        if (isAppExist)
+        {
+            return new NotFoundError("App not found");
+        }
+
+        // Delete the language
+        var language = await _dbContext.TranslationLanguage!
+            .AsTracking()
+            .HasId(id)
+            .HasAppId(appId)
+            .NotDeleted()
+            .FirstOrDefaultAsync();
+
+        if (language == null)
+        {
+            return new NotFoundError("Language not found");
+        }
+
+        language.DeletedAt = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+
+        // Save changes
+        await _dbContext.SaveChangesAsync();
+        return null;
     }
 }

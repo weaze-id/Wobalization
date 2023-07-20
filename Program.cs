@@ -45,7 +45,6 @@ builder.Services.AddScoped<IdentityService>();
 builder.Services.AddScoped<KeyService>();
 builder.Services.AddScoped<LanguageService>();
 builder.Services.AddScoped<UserService>();
-builder.Services.AddScoped<ValueService>();
 
 // Add endpoints for the Authentication API
 builder.Services.AddEndpoints<AppEndpoint>();
@@ -53,7 +52,6 @@ builder.Services.AddEndpoints<AuthenticationEndpoint>();
 builder.Services.AddEndpoints<KeyEndpoint>();
 builder.Services.AddEndpoints<LanguageEndpoint>();
 builder.Services.AddEndpoints<UserEndpoint>();
-builder.Services.AddEndpoints<ValueEndpoint>();
 
 // Configure RSA private key for JWT token generation and signing
 builder.Services.AddSingleton(services =>

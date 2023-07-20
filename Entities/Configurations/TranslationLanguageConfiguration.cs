@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Wobalization.Entities.Configurations;
 
-public class LanguageConfiguration : IEntityTypeConfiguration<Language>
+public class TranslationLanguageConfiguration : IEntityTypeConfiguration<TranslationLanguage>
 {
-    public void Configure(EntityTypeBuilder<Language> builder)
+    public void Configure(EntityTypeBuilder<TranslationLanguage> builder)
     {
         builder
             .Property(e => e.Id)

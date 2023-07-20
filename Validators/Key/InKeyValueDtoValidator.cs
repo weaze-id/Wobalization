@@ -1,13 +1,13 @@
 using FluentValidation;
-using Wobalization.Dtos.Value;
+using Wobalization.Dtos.Key;
 
-namespace Wobalization.Validators.Value;
+namespace Wobalization.Validators.Key;
 
-public class InValueDtoValidator : AbstractValidator<InValueDto>
+public class InValueDtoValidator : AbstractValidator<InKeyValueDto>
 {
     public InValueDtoValidator()
     {
-        RuleFor(e => e.KeyId)
+        RuleFor(e => e.LanguageId)
             .Cascade(CascadeMode.Stop)
             .NotEmpty();
 

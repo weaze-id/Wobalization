@@ -12,7 +12,7 @@ public class DatabaseContext : DbContext
     }
 
     public DbSet<App>? App { get; set; }
-    public DbSet<Language>? Language { get; set; }
+    public DbSet<TranslationLanguage>? TranslationLanguage { get; set; }
     public DbSet<TranslationKey>? TranslationKey { get; set; }
     public DbSet<TranslationValue>? TranslationValue { get; set; }
     public DbSet<User>? User { get; set; }
@@ -20,7 +20,7 @@ public class DatabaseContext : DbContext
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.ApplyConfiguration(new AppConfiguration());
-        builder.ApplyConfiguration(new LanguageConfiguration());
+        builder.ApplyConfiguration(new TranslationLanguageConfiguration());
         builder.ApplyConfiguration(new TranslationKeyConfiguration());
         builder.ApplyConfiguration(new TranslationValueConfiguration());
         builder.ApplyConfiguration(new UserConfiguration());

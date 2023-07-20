@@ -36,6 +36,16 @@ public static class TranslationKeyExtensions
             Id = e.Id,
             AppId = e.AppId,
             Key = e.Key,
+            Values = e.TranslationValues!
+                .Where(e => e.DeletedAt == null && e.TranslationLanguage!.DeletedAt == null)
+                .Select(e => new OutKeyValueDto
+                {
+                    Id = e.Id,
+                    LanguageId = e.TranslationLanguageId,
+                    Value = e.Value,
+                    CreatedAt = e.CreatedAt,
+                })
+                .ToList(),
             CreatedAt = e.CreatedAt,
             UpdatedAt = e.UpdatedAt
         });

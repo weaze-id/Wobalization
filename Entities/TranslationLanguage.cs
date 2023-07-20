@@ -1,6 +1,6 @@
 namespace Wobalization.Entities;
 
-public class Language
+public class TranslationLanguage
 {
     public long? Id { get; set; }
     public long? AppId { get; set; }
@@ -10,4 +10,5 @@ public class Language
     public long? DeletedAt { get; set; }
 
     public App? App { get; set; }
+    public List<TranslationValue>? TranslationValues { get; set; }
 }

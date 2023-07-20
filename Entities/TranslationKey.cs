@@ -10,4 +10,5 @@ public class TranslationKey
     public long? DeletedAt { get; set; }
 
     public App? App { get; set; }
+    public List<TranslationValue>? TranslationValues { get; set; }
 }
