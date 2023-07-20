@@ -1,3 +1,0 @@
-[submodule "lib/Kern"]
-	path = lib/Kern
-	url = https://github.com/weaze-id/kern
