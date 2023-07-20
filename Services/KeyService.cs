@@ -18,19 +18,21 @@ public class KeyService
 {
     private readonly DatabaseContext _dbContext;
     private readonly IdGenerator _idGenerator;
-    private readonly IValidator<InKeyDto> _validator;
+    private readonly IValidator<InKeyDto> _keyValidator;
+    private readonly IValidator<InKeyValueDto> _keyValueValidator;
 
     /// <summary>
     /// Initializes a new instance of the KeyService class with the specified dependencies.
     /// </summary>
     /// <param name="dbContext">The DatabaseContext instance.</param>
     /// <param name="idGenerator">The IdGenerator instance.</param>
-    /// <param name="validator">The IValidator of InKeyDto instance.</param>
-    public KeyService(DatabaseContext dbContext, IdGenerator idGenerator, IValidator<InKeyDto> validator)
+    /// <param name="keyValidator">The IValidator of InKeyDto instance.</param>
+    public KeyService(DatabaseContext dbContext, IdGenerator idGenerator, IValidator<InKeyDto> keyValidator, IValidator<InKeyValueDto> keyValueValidator)
     {
         _dbContext = dbContext;
         _idGenerator = idGenerator;
-        _validator = validator;
+        _keyValidator = keyValidator;
+        _keyValueValidator = keyValueValidator;
     }
 
     /// <summary>
@@ -48,7 +50,7 @@ public class KeyService
             .NotDeleted()
             .AnyAsync();
 
-        if (isAppExist)
+        if (!isAppExist)
         {
             return (null, new NotFoundError("App not found"));
         }
@@ -78,7 +80,7 @@ public class KeyService
             .NotDeleted()
             .AnyAsync();
 
-        if (isAppExist)
+        if (!isAppExist)
         {
             return (null, new NotFoundError("App not found"));
         }
@@ -108,13 +110,20 @@ public class KeyService
     /// </returns>
     public async Task<(OutKeyDto?, ValidationResult?, ErrorBase?)> AddAsync(long appId, InKeyDto dto)
     {
+        // Validate the DTO
+        var validationResult = _keyValidator.Validate(dto);
+        if (!validationResult.IsValid)
+        {
+            return (null, validationResult, null);
+        }
+
         // Check if the app exists
         var isAppExist = await _dbContext.App!
             .HasId(appId)
             .NotDeleted()
             .AnyAsync();
 
-        if (isAppExist)
+        if (!isAppExist)
         {
             return (null, null, new NotFoundError("App not found"));
         }
@@ -163,13 +172,20 @@ public class KeyService
         long keyId,
         InKeyValueDto dto)
     {
+        // Validate the DTO
+        var validationResult = _keyValueValidator.Validate(dto);
+        if (!validationResult.IsValid)
+        {
+            return (validationResult, null);
+        }
+
         // Check if the app exists
         var isAppExist = await _dbContext.App!
             .HasId(appId)
             .NotDeleted()
             .AnyAsync();
 
-        if (isAppExist)
+        if (!isAppExist)
         {
             return (null, new NotFoundError("App not found"));
         }
@@ -181,7 +197,7 @@ public class KeyService
             .NotDeleted()
             .AnyAsync();
 
-        if (isKeyExist)
+        if (!isKeyExist)
         {
             return (null, new NotFoundError("Key not found"));
         }
@@ -193,7 +209,7 @@ public class KeyService
             .NotDeleted()
             .AnyAsync();
 
-        if (isLanguageExist)
+        if (!isLanguageExist)
         {
             return (null, new NotFoundError("Language not found"));
         }
@@ -241,13 +257,20 @@ public class KeyService
     /// </returns>
     public async Task<(OutKeyDto?, ValidationResult?, ErrorBase?)> UpdateAsync(long appId, long id, InKeyDto dto)
     {
+        // Validate the DTO
+        var validationResult = _keyValidator.Validate(dto);
+        if (!validationResult.IsValid)
+        {
+            return (null, validationResult, null);
+        }
+
         // Check if the app exists
         var isAppExist = await _dbContext.App!
             .HasId(appId)
             .NotDeleted()
             .AnyAsync();
 
-        if (isAppExist)
+        if (!isAppExist)
         {
             return (null, null, new NotFoundError("App not found"));
         }
@@ -301,7 +324,7 @@ public class KeyService
             .NotDeleted()
             .AnyAsync();
 
-        if (isAppExist)
+        if (!isAppExist)
         {
             return new NotFoundError("App not found");
         }

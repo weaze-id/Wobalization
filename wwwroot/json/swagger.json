@@ -475,6 +475,16 @@
             }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InKeyValueDto"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "description": "Success"
@@ -835,6 +845,24 @@
         "type": "object",
         "properties": {
           "key": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "InKeyValueDto": {
+        "required": [
+          "languageId",
+          "value"
+        ],
+        "type": "object",
+        "properties": {
+          "languageId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "value": {
             "minLength": 1,
             "type": "string"
           }

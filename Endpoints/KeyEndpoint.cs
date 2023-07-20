@@ -39,7 +39,7 @@ public class KeyEndpoint : IEndpoints
             .WithName("Delete existing key");
 
         group
-            .MapPost("/{id}/value", DeleteAsync)
+            .MapPost("/{id}/value", AddValueAsync)
             .WithName("Add new value to existing key");
 
         return group;

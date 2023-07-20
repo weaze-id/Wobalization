@@ -49,7 +49,7 @@ public class LanguageService
             .NotDeleted()
             .AnyAsync();
 
-        if (isAppExist)
+        if (!isAppExist)
         {
             return (null, new NotFoundError("App not found"));
         }
@@ -81,7 +81,7 @@ public class LanguageService
             .NotDeleted()
             .AnyAsync();
 
-        if (isAppExist)
+        if (!isAppExist)
         {
             return (null, new NotFoundError("App not found"));
         }
@@ -115,7 +115,7 @@ public class LanguageService
             .NotDeleted()
             .AnyAsync();
 
-        if (isAppExist)
+        if (!isAppExist)
         {
             return (null, null, new NotFoundError("App not found"));
         }
@@ -173,7 +173,7 @@ public class LanguageService
             .NotDeleted()
             .AnyAsync();
 
-        if (isAppExist)
+        if (!isAppExist)
         {
             return (null, null, new NotFoundError("App not found"));
         }
@@ -227,7 +227,7 @@ public class LanguageService
             .NotDeleted()
             .AnyAsync();
 
-        if (isAppExist)
+        if (!isAppExist)
         {
             return new NotFoundError("App not found");
         }
