@@ -27,7 +27,11 @@ public class KeyService
     /// <param name="dbContext">The DatabaseContext instance.</param>
     /// <param name="idGenerator">The IdGenerator instance.</param>
     /// <param name="keyValidator">The IValidator of InKeyDto instance.</param>
-    public KeyService(DatabaseContext dbContext, IdGenerator idGenerator, IValidator<InKeyDto> keyValidator, IValidator<InKeyValueDto> keyValueValidator)
+    public KeyService(
+        DatabaseContext dbContext,
+        IdGenerator idGenerator,
+        IValidator<InKeyDto> keyValidator,
+        IValidator<InKeyValueDto> keyValueValidator)
     {
         _dbContext = dbContext;
         _idGenerator = idGenerator;

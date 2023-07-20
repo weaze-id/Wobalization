@@ -6,7 +6,10 @@ namespace Wobalization.Database.Extensions;
 
 public static class TranslationLanguageExtensions
 {
-    public static IQueryable<TranslationLanguage> SearchAndPaginate(this IQueryable<TranslationLanguage> queryable, string? search, int? page)
+    public static IQueryable<TranslationLanguage> SearchAndPaginate(
+        this IQueryable<TranslationLanguage> queryable,
+        string? search,
+        int? page)
     {
         if (search != null)
         {

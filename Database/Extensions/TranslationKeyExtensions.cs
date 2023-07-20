@@ -6,7 +6,10 @@ namespace Wobalization.Database.Extensions;
 
 public static class TranslationKeyExtensions
 {
-    public static IQueryable<TranslationKey> SearchAndPaginate(this IQueryable<TranslationKey> queryable, string? search, int? page)
+    public static IQueryable<TranslationKey> SearchAndPaginate(
+        this IQueryable<TranslationKey> queryable,
+        string? search,
+        int? page)
     {
         if (search != null)
         {
@@ -38,7 +41,7 @@ public static class TranslationKeyExtensions
                     Id = e.Id,
                     LanguageId = e.TranslationLanguageId,
                     Value = e.Value,
-                    CreatedAt = e.CreatedAt,
+                    CreatedAt = e.CreatedAt
                 })
                 .ToList(),
             CreatedAt = e.CreatedAt,
