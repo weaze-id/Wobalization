@@ -39,21 +39,6 @@ builder.Services.Configure<RouteHandlerOptions>(o => o.ThrowOnBadRequest = true)
 // Add validators from the "Wobalization" assembly
 builder.Services.AddValidatorsFromAssembly(Assembly.Load("Wobalization"));
 
-// Register services
-builder.Services.AddScoped<AppService>();
-builder.Services.AddScoped<AuthenticationService>();
-builder.Services.AddScoped<IdentityService>();
-builder.Services.AddScoped<KeyService>();
-builder.Services.AddScoped<LanguageService>();
-builder.Services.AddScoped<UserService>();
-
-// Add endpoints for the Authentication API
-builder.Services.AddEndpoints<AppEndpoint>();
-builder.Services.AddEndpoints<AuthenticationEndpoint>();
-builder.Services.AddEndpoints<KeyEndpoint>();
-builder.Services.AddEndpoints<LanguageEndpoint>();
-builder.Services.AddEndpoints<UserEndpoint>();
-
 // Configure RSA private key for JWT token generation and signing
 builder.Services.AddSingleton(services =>
 {
@@ -139,6 +124,24 @@ builder.Services.AddCors(options =>
             .AllowCredentials();
     });
 });
+
+
+// Register services
+builder.Services.AddScoped<AppService>();
+builder.Services.AddScoped<AuthenticationService>();
+builder.Services.AddScoped<IdentityService>();
+builder.Services.AddScoped<KeyService>();
+builder.Services.AddScoped<LanguageService>();
+builder.Services.AddScoped<TranslationService>();
+builder.Services.AddScoped<UserService>();
+
+// Add endpoints for the Authentication API
+builder.Services.AddEndpoints<AppEndpoint>();
+builder.Services.AddEndpoints<AuthenticationEndpoint>();
+builder.Services.AddEndpoints<KeyEndpoint>();
+builder.Services.AddEndpoints<LanguageEndpoint>();
+builder.Services.AddEndpoints<TranslationEndpoint>();
+builder.Services.AddEndpoints<UserEndpoint>();
 
 var app = builder.Build();
 
