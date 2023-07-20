@@ -8,7 +8,6 @@ using Wobalization.Database.DatabaseContexts;
 using Wobalization.Database.Extensions;
 using Wobalization.Database.Models;
 using Wobalization.Dtos.User;
-using Wobalization.Services;
 
 namespace Wobalization.Services;
 
@@ -128,13 +127,6 @@ public class UserService
     /// <returns>A tuple containing the updated user DTO, validation results, and an error if any.</returns>
     public async Task<(OutUserDto?, ValidationResult?, ErrorBase?)> UpdateAsync(long id, InUserDto dto)
     {
-        // Get user identity
-        var (identity, identityError) = _identityService.Get();
-        if (identityError != null)
-        {
-            return (null, null, identityError);
-        }
-
         // Validate the DTO
         var validationResult = _validator.Validate(dto);
         if (!validationResult.IsValid)
@@ -184,18 +176,11 @@ public class UserService
     /// <returns>An error if any.</returns>
     public async Task<ErrorBase?> DeleteAsync(long id)
     {
-        // Get user identity
-        var (identity, identityError) = _identityService.Get();
-        if (identityError != null)
-        {
-            return identityError;
-        }
-
         // Delete the user
         var user = await _dbContext.User!
             .AsTracking()
             .Where(e => e.Id == id &&
-                        e.Id != identity!.Id &&
+                        e.Id != _identityService!.UserId &&
                         e.DeletedAt == null)
             .FirstOrDefaultAsync();
 

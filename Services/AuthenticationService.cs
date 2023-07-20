@@ -95,8 +95,12 @@ public class AuthenticationService
             Id = user.Id
         };
 
-        var token = await _identityService.SignInAsync(identity);
-        return (new OutTokenDto { Token = token }, null, null);
+        var (accessToken, refreshToken) = await _identityService.SignInAsync(identity);
+        return (new OutTokenDto
+        {
+            AccessToken = accessToken,
+            RefreshToken = refreshToken
+        }, null, null);
     }
 
     /// <summary>
@@ -142,8 +146,12 @@ public class AuthenticationService
             Id = user.Id
         };
 
-        var token = await _identityService.SignInAsync(identity);
-        return (new OutTokenDto { Token = token }, null, null);
+        var (accessToken, refreshToken) = await _identityService.SignInAsync(identity);
+        return (new OutTokenDto
+        {
+            AccessToken = accessToken,
+            RefreshToken = refreshToken
+        }, null, null);
     }
 
     /// <summary>

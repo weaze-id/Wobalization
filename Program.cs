@@ -12,6 +12,7 @@ using Microsoft.Net.Http.Headers;
 using Wobalization.Database.DatabaseContexts;
 using Wobalization.Endpoints;
 using Wobalization.Extensions;
+using Wobalization.Middlewares;
 using Wobalization.Services;
 using KernAuthorization = Kern.AspNetCore.Authorization.Extensions.ServiceCollectionExtensions;
 
@@ -102,8 +103,8 @@ builder.Services
         options.TokenValidationParameters = new TokenValidationParameters
         {
             IssuerSigningKey = securityKey,
-            ValidAudience = builder.Configuration["Jwt:Audience"],
-            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:AccessToken:Audience"],
+            ValidIssuer = builder.Configuration["Jwt:AccessToken:Issuer"],
             ClockSkew = TimeSpan.Zero
         };
     });
@@ -169,6 +170,7 @@ app.UseCors();
 
 // Enable authentication and authorization middleware
 app.UseAuthentication();
+app.UseMiddleware<IdentityMiddleware>();
 app.UseAuthorization();
 
 // Map endpoints for the Authentication API
