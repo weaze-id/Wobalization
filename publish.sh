@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Blazor WebAssembly project path
-blazorProjectPath="src/cmd/Wobalization.Wasm"
+blazorProjectPath="Cmd/Wobalization.Wasm"
 
 # ASP.NET Core project path
-aspnetProjectPath="src/cmd/Wobalization.Api"
+aspnetProjectPath="Cmd/Wobalization"
 
 # Publish Blazor WebAssembly project
 dotnet publish "$blazorProjectPath" --configuration Release

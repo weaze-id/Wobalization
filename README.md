@@ -38,11 +38,11 @@ dotnet restore
 
 ```bash
 # Run the api server
-cd src/cmd/Wobalization.Api
+cd Cmd/Wobalization
 dotnet run
 
 # Run the dashboard
-cd src/cmd/Wobalization.Wasm
+cd Cmd/Wobalization.Wasm
 dotnet run
 ```
 
